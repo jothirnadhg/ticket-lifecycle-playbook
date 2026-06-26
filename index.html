@@ -1,0 +1,2938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ticket Flow Templates | Arintra</title>
+<style>
+  :root {
+    --ground: #F5F4F1;
+    --surface: #FFFFFF;
+    --text: #1A1916;
+    --text-muted: #6B6860;
+    --text-faint: #A8A59F;
+    --border: #E2E0DB;
+
+    --cs:  #475569;
+    --cs-light: #F1F5F9;
+    --cdt: #1D4ED8;
+    --cdt-light: #EFF6FF;
+    --prod: #6D28D9;
+    --prod-light: #F5F3FF;
+    --eng: #B45309;
+    --eng-light: #FFFBEB;
+    --cqa: #166534;
+    --cqa-light: #F0FDF4;
+    --esc: #B91C1C;
+    --esc-light: #FEF2F2;
+
+    --radius: 6px;
+    --card-radius: 10px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--ground);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── TOP HEADER ── */
+  .page-header {
+    background: var(--text);
+    color: white;
+    padding: 28px 40px 24px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .page-header .brand {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 6px;
+  }
+  .page-header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: white;
+  }
+  .page-header .subtitle {
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    margin-top: 4px;
+  }
+
+  /* ── OWNER LEGEND ── */
+  .legend {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 40px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .legend-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-right: 4px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 156px 1fr;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+    gap: 0 0;
+    align-items: start;
+  }
+
+  /* ── STICKY NAV ── */
+  .stage-nav {
+    position: sticky;
+    top: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding-top: 4px;
+    padding-right: 12px;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    padding: 3px 6px 3px 2px;
+    border-radius: 5px;
+    width: 100%;
+    transition: background 0.12s, opacity 0.12s;
+    opacity: 0.72;
+  }
+  .nav-item:hover { opacity: 1; background: var(--border); }
+  .nav-circle {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: 800;
+    color: white;
+    letter-spacing: 0;
+  }
+  .nav-circle.cs   { background: var(--cs); }
+  .nav-circle.cdt  { background: var(--cdt); }
+  .nav-circle.prod { background: var(--prod); }
+  .nav-circle.eng  { background: var(--eng); }
+  .nav-circle.cqa  { background: var(--cqa); }
+  .nav-circle.esc  { background: var(--esc); }
+  .nav-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-connector {
+    width: 2px; height: 4px;
+    background: var(--border);
+    border-radius: 1px;
+    margin-left: 11px;
+  }
+
+  /* ── PENDING: status not yet in Jira ── */
+  .pending-tag {
+    display: inline-flex;
+    align-items: center;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #3730A3;
+    background: #EEF2FF;
+    border: 1px solid #C7D2FE;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-left: 6px;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  /* ── GAP: not followed today ── */
+  .gap-tag {
+    display: inline-flex;
+    align-items: center;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #C2410C;
+    background: #FFEDD5;
+    border: 1px solid #FED7AA;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-left: 8px;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+  .actions-list li.gap,
+  .rules-list li.gap {
+    background: #FFF7ED;
+    border-radius: 5px;
+    padding: 5px 8px 5px 6px;
+    outline: 1px solid #FED7AA;
+    margin-left: -6px;
+    margin-right: -6px;
+  }
+
+  /* ── STAGE CARD ── */
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .stage-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+
+  .stage-header {
+    padding: 18px 24px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .stage-header::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+  }
+  .stage-card.cs .stage-header::before  { background: var(--cs); }
+  .stage-card.cdt .stage-header::before { background: var(--cdt); }
+  .stage-card.prod .stage-header::before{ background: var(--prod); }
+  .stage-card.eng .stage-header::before { background: var(--eng); }
+  .stage-card.cqa .stage-header::before { background: var(--cqa); }
+  .stage-card.esc .stage-header::before { background: var(--esc); }
+
+  .stage-ghost {
+    position: absolute;
+    right: 16px;
+    top: -8px;
+    font-size: 80px;
+    font-weight: 900;
+    line-height: 1;
+    pointer-events: none;
+    letter-spacing: -0.05em;
+    opacity: 0.05;
+    color: var(--text);
+    user-select: none;
+  }
+
+  .stage-meta {
+    position: relative;
+    z-index: 1;
+  }
+  .stage-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .stage-name {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .stage-trigger-inline {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 3px;
+  }
+
+  .owner-chip {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    position: relative;
+    z-index: 1;
+  }
+  .owner-chip.cs   { background: var(--cs-light);   color: var(--cs); }
+  .owner-chip.cdt  { background: var(--cdt-light);  color: var(--cdt); }
+  .owner-chip.prod { background: var(--prod-light); color: var(--prod); }
+  .owner-chip.eng  { background: var(--eng-light);  color: var(--eng); }
+  .owner-chip.cqa  { background: var(--cqa-light);  color: var(--cqa); }
+  .owner-chip.esc  { background: var(--esc-light);  color: var(--esc); }
+
+  /* ── CARD BODY ── */
+  .stage-body {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  @media (max-width: 680px) {
+    .two-col { grid-template-columns: 1fr; }
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Actions */
+  .actions-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .actions-list li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .action-num {
+    min-width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--ground);
+    border: 1px solid var(--border);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+
+  /* Jira updates */
+  .jira-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .jira-list li {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+  .jira-list li::before {
+    content: '☐';
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-top: 0px;
+    flex-shrink: 0;
+  }
+  .field-name {
+    font-weight: 600;
+    color: var(--text);
+  }
+  .arrow {
+    color: var(--text-muted);
+    margin: 0 3px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  /* Status pill */
+  .status-pill {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+  }
+  .sp-open     { background: #DBEAFE; color: #1E40AF; }
+  .sp-disc     { background: #EDE9FE; color: #5B21B6; }
+  .sp-wait     { background: #FEF3C7; color: #92400E; }
+  .sp-discDone { background: #D1FAE5; color: #065F46; }
+  .sp-deliver  { background: #FEE2E2; color: #991B1B; }
+  .sp-done     { background: #D1FAE5; color: #065F46; }
+  .sp-reopen   { background: #FEE2E2; color: #991B1B; }
+
+  /* Done when box */
+  .done-box {
+    background: var(--ground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 12px;
+    font-size: 12.5px;
+    line-height: 1.55;
+  }
+  .done-box ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .done-box li::before {
+    content: '✓ ';
+    color: var(--cqa);
+    font-weight: 700;
+  }
+
+  /* Handoff */
+  .handoff-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .handoff-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--ground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  .handoff-arrow { color: var(--text-faint); font-size: 11px; }
+  .handoff-dest { font-weight: 600; }
+
+  /* Rules */
+  .rules-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .rules-list li {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-size: 12.5px;
+    line-height: 1.5;
+    padding: 7px 10px;
+    background: #FFFBEB;
+    border: 1px solid #FDE68A;
+    border-radius: var(--radius);
+  }
+  .rules-list li::before {
+    content: '⚠';
+    color: #D97706;
+    font-size: 12px;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+
+  /* Escalation card special */
+  .stage-card.esc .stage-header {
+    background: #FEF2F2;
+  }
+  .esc-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--esc);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  /* Taxonomy box */
+  .taxonomy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 6px;
+  }
+  .tax-item {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+  .tax-name { font-weight: 600; display: block; margin-bottom: 2px; }
+  .tax-desc { color: var(--text-muted); font-size: 11px; }
+  .tax-item.no-eng { border-left: 3px solid var(--cdt); }
+  .tax-item.eng    { border-left: 3px solid var(--eng); }
+
+  /* SLA row */
+  .sla-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .sla-chip {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+  .sla-chip b { display: block; font-size: 13px; }
+
+  /* PM table */
+  .mini-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .mini-table th {
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    padding: 4px 8px 6px;
+  }
+  .mini-table td {
+    padding: 5px 8px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .mini-table tr:last-child td { border-bottom: none; }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: var(--border);
+  }
+
+  code {
+    font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+    font-size: 11px;
+    background: var(--ground);
+    border: 1px solid var(--border);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--text);
+  }
+
+  strong { font-weight: 600; }
+
+  @media print {
+    body { background: white; }
+    .stage-nav { display: none; }
+    .layout { grid-template-columns: 1fr; padding: 16px; }
+    .stage-card { break-inside: avoid; margin-bottom: 16px; }
+  }
+
+  /* ══════════ COMMUNICATION TEMPLATE BLOCKS ══════════ */
+  .template-block {
+    margin-top: 16px;
+    border: 1px solid #0891b2;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .template-block > summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 13px;
+    background: #e0f2fe;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: #0369a1;
+    list-style: none;
+    user-select: none;
+  }
+  .template-block > summary::-webkit-details-marker { display: none; }
+  .template-block > summary::before { content: '▶'; font-size: 9px; transition: transform .15s; }
+  .template-block[open] > summary::before { transform: rotate(90deg); }
+  .template-block > summary:hover { background: #bae6fd; }
+  .tpl-timing {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 400;
+    color: #0891b2;
+    background: #fff;
+    padding: 2px 7px;
+    border-radius: 10px;
+    border: 1px solid #bae6fd;
+    white-space: nowrap;
+  }
+  .tpl-owner-chip {
+    font-size: 10px;
+    font-weight: 600;
+    color: #fff;
+    background: #0891b2;
+    padding: 2px 7px;
+    border-radius: 10px;
+    white-space: nowrap;
+  }
+  .template-body { padding: 12px 14px; background: #f0f9ff; }
+  .tpl-note {
+    font-size: 11px;
+    color: #0369a1;
+    background: #e0f2fe;
+    border-left: 3px solid #0891b2;
+    padding: 6px 10px;
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+  .tpl-pre {
+    white-space: pre-wrap;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 11px;
+    line-height: 1.65;
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 11px 13px;
+    margin: 8px 0 6px;
+    color: #1e293b;
+    overflow-x: auto;
+  }
+  .ph { color: #0369a1; font-weight: 700; }
+  .ph-var { color: #7c3aed; font-weight: 600; }
+  .tpl-opt { color: #64748b; font-style: italic; }
+  .tpl-ph-guide { margin-top: 8px; }
+  .tpl-ph-guide .ph-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #64748b; margin-bottom: 4px; }
+  .tpl-ph-guide ul { list-style: none; padding: 0; margin: 0; }
+  .tpl-ph-guide li { font-size: 11px; color: #475569; padding: 2px 0; }
+  .tpl-ph-guide code { background: #e0f2fe; padding: 1px 4px; border-radius: 3px; font-size: 10px; color: #0369a1; font-family: monospace; }
+  .copy-btn {
+    font-size: 11px;
+    padding: 5px 13px;
+    background: #0891b2;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background .15s;
+  }
+  .copy-btn:hover { background: #0e7490; }
+  .copy-btn.copied { background: #16a34a; }
+
+  /* Subsequent update reference table */
+  .upd-ref { margin-top: 10px; }
+  .upd-ref .ph-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #64748b; margin-bottom: 5px; }
+  .upd-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .upd-table th { text-align: left; padding: 5px 8px; background: #e0f2fe; font-weight: 600; color: #0369a1; border-bottom: 1px solid #bae6fd; }
+  .upd-table td { padding: 4px 8px; border-top: 1px solid #f1f5f9; color: #475569; vertical-align: top; line-height: 1.4; }
+  .upd-table tr:hover td { background: #f8fafc; }
+
+  /* Stage 2 follow-up attempt grid */
+  .attempt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+  @media (max-width: 700px) { .attempt-grid { grid-template-columns: 1fr; } }
+  .attempt-card { background: #fff; border: 1px solid #bae6fd; border-radius: 6px; padding: 10px; }
+  .attempt-label { font-size: 10px; font-weight: 700; color: #0369a1; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 5px; }
+  .attempt-timing { font-size: 10px; color: #64748b; margin-bottom: 6px; }
+  .tpl-pre-sm { white-space: pre-wrap; font-family: monospace; font-size: 10.5px; line-height: 1.55; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 5px; padding: 8px 10px; color: #1e293b; max-height: 180px; overflow-y: auto; margin: 0; }
+  .variant-header { font-size: 11px; font-weight: 700; color: #0369a1; padding: 6px 0 3px; border-top: 1px solid #bae6fd; margin-top: 12px; }
+  .variant-header:first-child { border-top: none; margin-top: 0; }
+
+  /* Engineering closure template */
+  .engg-fields { display: grid; gap: 8px; margin-top: 8px; }
+  .engg-field { background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px; }
+  .engg-field-label { font-size: 10px; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
+  .engg-field-hint { font-size: 11px; color: #64748b; font-style: italic; line-height: 1.4; }
+
+  /* Stage 11 resolution template tabs */
+  .res-tabs { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
+  .res-tab {
+    font-size: 10px;
+    padding: 4px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    cursor: pointer;
+    background: #f8fafc;
+    color: #475569;
+    transition: all .1s;
+    white-space: nowrap;
+  }
+  .res-tab:hover { border-color: #0891b2; color: #0369a1; }
+  .res-tab.active { background: #0891b2; color: #fff; border-color: #0891b2; }
+  .res-panel { display: none; }
+  .res-panel.active { display: block; }
+  .res-when { font-size: 11px; color: #475569; background: #fff; border: 1px solid #e2e8f0; border-radius: 5px; padding: 7px 10px; margin-bottom: 8px; }
+  .res-variant-sep { font-size: 11px; font-weight: 700; color: #0369a1; margin: 14px 0 6px; padding-top: 10px; border-top: 1px dashed #bae6fd; }
+
+  
+  /* ══════════ ENGINEERING SUB-TICKET FLOW ══════════ */
+  .subtix-block { margin-bottom: 14px; }
+  .subtix-flow-wrap { overflow-x: auto; padding-bottom: 6px; }
+  .subtix-flow {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: max-content;
+    padding: 10px 4px 4px;
+  }
+  .subtix-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    min-width: 82px;
+  }
+  .subtix-pill {
+    font-size: 9.5px;
+    font-weight: 700;
+    text-align: center;
+    padding: 4px 7px;
+    border-radius: 5px;
+    border: 1.5px solid;
+    white-space: nowrap;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+  }
+  .subtix-pill.st-todo    { background:#f8fafc; color:#475569; border-color:#94a3b8; }
+  .subtix-pill.st-inprog  { background:#dbeafe; color:#1d4ed8; border-color:#93c5fd; }
+  .subtix-pill.st-cr      { background:#ede9fe; color:#6d28d9; border-color:#c4b5fd; }
+  .subtix-pill.st-readyqa { background:#fef9c3; color:#a16207; border-color:#fde047; }
+  .subtix-pill.st-qastag  { background:#fef3c7; color:#b45309; border-color:#fbbf24; }
+  .subtix-pill.st-reg     { background:#ffedd5; color:#c2410c; border-color:#fb923c; }
+  .subtix-pill.st-deploy  { background:#dcfce7; color:#15803d; border-color:#86efac; }
+  .subtix-pill.st-done    { background:#14532d; color:#fff; border-color:#14532d; }
+  .subtix-pill.st-blocked { background:#fee2e2; color:#b91c1c; border-color:#fca5a5; }
+  .subtix-pill.st-onhold  { background:#f3f4f6; color:#6b7280; border-color:#d1d5db; }
+  .subtix-pill.st-reject  { background:#fdf2f8; color:#9d174d; border-color:#f9a8d4; }
+  .subtix-arrow-h { font-size: 14px; color: #94a3b8; padding: 0 1px; margin-top: -6px; }
+  .subtix-label { font-size: 9px; color: #94a3b8; text-align: center; }
+  .subtix-label strong { color: #475569; font-weight: 600; }
+  .subtix-side-states {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 8px 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+  }
+  .subtix-side-item { display: flex; align-items: flex-start; gap: 7px; min-width: 200px; flex: 1; }
+  .subtix-side-item .subtix-pill { flex-shrink: 0; }
+  .subtix-side-desc { font-size: 10.5px; color: #475569; line-height: 1.4; padding-top: 2px; }
+  .subtix-when { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
+  .subtix-note { font-size: 10.5px; color: #0369a1; background:#e0f2fe; border-left:3px solid #0891b2; padding:5px 9px; border-radius:0 4px 4px 0; margin-top:8px; }
+  .subtix-stage-map { width:100%; border-collapse:collapse; font-size:10.5px; margin-top:8px; }
+  .subtix-stage-map th { text-align:left; padding:5px 8px; background:#f1f5f9; color:#475569; font-weight:700; border-bottom:1px solid #e2e8f0; font-size:10px; text-transform:uppercase; letter-spacing:.03em; }
+  .subtix-stage-map td { padding:4px 8px; border-top:1px solid #f1f5f9; vertical-align:top; line-height:1.45; }
+  .subtix-stage-map tr:hover td { background:#f8fafc; }
+
+  
+  /* ══ ARCH DIAGRAM SECTION ══ */
+  .arch-section { background: var(--surface); border-bottom: 3px solid var(--border); padding: 26px 40px 30px; }
+  .arch-inner { max-width: 1100px; margin: 0 auto; }
+  .arch-hdr { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 14px; }
+  .arch-eyebrow { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--text-muted); margin-bottom: 3px; }
+  .arch-ttl { font-size: 16px; font-weight: 700; color: var(--text); }
+  .arch-sub { font-size: 12px; color: var(--text-muted); line-height: 1.6; margin-top: 3px; max-width: 560px; }
+  .arch-legend { display: flex; gap: 12px; flex-wrap: wrap; align-self: center; }
+  .arch-leg { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; }
+  .arch-leg-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+  .arch-svg-wrap { border: 1px solid var(--border); border-radius: 10px; overflow-x: auto; background: #f8fafc; }
+  .arch-footnotes { display: flex; gap: 20px; margin-top: 10px; flex-wrap: wrap; }
+  .arch-fn { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; }
+
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <div>
+    <div class="brand">Arintra AI &nbsp;·&nbsp; Customer Escalations</div>
+    <h1>Customer Ticket Workflow: Stage Owner Templates</h1>
+    <div class="subtitle">Reference guide for every owner at every stage. Use "Reply to Customer" for customer-visible messages. "Add Internal Note" for internal-only.</div>
+  </div>
+</div>
+
+<div class="legend">
+  <span class="legend-label">Owner Key</span>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--cs)"></div> CS / Customer</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--cdt)"></div> CDT</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--prod)"></div> Product</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--eng)"></div> Engineering</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--cqa)"></div> CQA</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--esc)"></div> Escalation Fast-Track</div>
+  <div style="width:1px;height:16px;background:var(--border);margin:0 4px"></div>
+  <div class="legend-item"><div class="legend-dot" style="background:#EA580C"></div><strong style="color:#C2410C">Not followed today</strong> &mdash; call-out needed</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#4338CA"></div><strong style="color:#3730A3">Not in Jira yet</strong> &mdash; status pending config</div>
+</div>
+
+<div style="background:#EEF2FF;border-bottom:2px solid #C7D2FE;padding:14px 40px;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:flex-start;gap:16px;">
+    <div style="font-size:18px;line-height:1;margin-top:2px;">&#9432;</div>
+    <div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#3730A3;margin-bottom:6px;">Target Jira Statuses &mdash; Not yet configured in Jira <span class="pending-tag">Not in Jira yet</span></div>
+      <div style="font-size:12.5px;color:#312E81;line-height:1.6;">The three statuses below are part of the Sourav-approved workflow redesign. They appear throughout this document as the <strong>target state</strong>. Until they are added to each JSM board, use the interim equivalent shown.</div>
+      <div style="display:flex;gap:24px;margin-top:10px;flex-wrap:wrap;">
+        <div style="font-size:12px;"><span class="status-pill sp-disc">Discovery</span> &rarr; use <strong>Review</strong> today</div>
+        <div style="font-size:12px;"><span class="status-pill sp-discDone">Discovery Done</span> &rarr; use <strong>Review</strong> today</div>
+        <div style="font-size:12px;"><span class="status-pill sp-deliver">Picked for Delivery</span> &rarr; use <strong>Work in Progress</strong> today</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="arch-section">
+  <div class="arch-inner">
+    <div class="arch-hdr">
+      <div>
+        <div class="arch-eyebrow">System Architecture</div>
+        <div class="arch-ttl">How the three ticket systems connect end-to-end</div>
+        <div class="arch-sub">Every customer issue flows through three distinct systems. Understanding the boundaries &mdash; what lives where, and who updates what &mdash; is the single biggest source of visibility gaps today.</div>
+      </div>
+      <div class="arch-legend">
+        <div class="arch-leg"><div class="arch-leg-dot" style="background:#0d9488"></div>JSM &mdash; Customer Ticket (CDT)</div>
+        <div class="arch-leg"><div class="arch-leg-dot" style="background:#7c3aed"></div>CPS &mdash; Scoping Ticket (Product)</div>
+        <div class="arch-leg"><div class="arch-leg-dot" style="background:#d97706"></div>Sub-tickets &mdash; CIPHER / CUR (Engineering)</div>
+      </div>
+    </div>
+
+    <div class="arch-svg-wrap">
+<svg viewBox="0 0 1020 480" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:740px;display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <!-- Arrow markers -->
+    <marker id="aR-t" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,1.5 L9,5 L0,8.5 L2.5,5 Z" fill="#0d9488"/></marker>
+    <marker id="aL-t" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M10,1.5 L1,5 L10,8.5 L7.5,5 Z" fill="#0d9488"/></marker>
+    <marker id="aR-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,1.5 L9,5 L0,8.5 L2.5,5 Z" fill="#7c3aed"/></marker>
+    <marker id="aR-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,1.5 L9,5 L0,8.5 L2.5,5 Z" fill="#d97706"/></marker>
+    <marker id="aD-t" viewBox="0 0 10 10" refX="5" refY="9" markerWidth="5" markerHeight="5" orient="auto"><path d="M1.5,0 L5,9 L8.5,0 L5,2.5 Z" fill="#0d9488"/></marker>
+    <marker id="aU-t" viewBox="0 0 10 10" refX="5" refY="1" markerWidth="5" markerHeight="5" orient="auto"><path d="M1.5,10 L5,1 L8.5,10 L5,7.5 Z" fill="#0d9488"/></marker>
+    <!-- Card shadow -->
+    <filter id="cs" x="-6%" y="-6%" width="112%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.09"/>
+    </filter>
+    <!-- Subtle grid pattern -->
+    <pattern id="g20" width="22" height="22" patternUnits="userSpaceOnUse">
+      <path d="M22,0 L0,0 L0,22" fill="none" stroke="#e2e8f0" stroke-width="0.4"/>
+    </pattern>
+  </defs>
+
+  <!-- ── Background ── -->
+  <rect width="1020" height="480" rx="8" fill="url(#g20)"/>
+  <rect width="1020" height="480" rx="8" fill="white" fill-opacity="0.55"/>
+
+  <!-- ── "FORWARD FLOW" lane indicator (top) ── -->
+  <rect x="82" y="8" width="930" height="15" rx="4" fill="#f0fdfa" stroke="#ccfbf1" stroke-width="1"/>
+  <text x="547" y="20" text-anchor="middle" font-size="8" font-weight="700" fill="#0d9488" letter-spacing="1">FORWARD FLOW — PROBLEM REPORTED &rarr; ENGINEERING PICKS UP</text>
+
+  <!-- ── "RETURN FLOW" lane indicator (bottom) ── -->
+  <rect x="82" y="432" width="930" height="15" rx="4" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+  <text x="547" y="444" text-anchor="middle" font-size="8" font-weight="700" fill="#d97706" letter-spacing="1">RETURN FLOW — FIX COMPLETE &rarr; CUSTOMER TICKET CLOSED</text>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- COMPONENT 1: CUSTOMER ACTOR            -->
+  <!-- ═══════════════════════════════════════ -->
+  <!-- Actor card -->
+  <rect x="6" y="68" width="72" height="110" rx="7" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <!-- Person icon made of shapes -->
+  <circle cx="42" cy="97" r="13" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="42" y="101" text-anchor="middle" font-size="13" fill="#475569">&#x1F464;</text>
+  <text x="42" y="120" text-anchor="middle" font-size="9" font-weight="700" fill="#334155">CUSTOMER</text>
+  <text x="42" y="133" text-anchor="middle" font-size="7.5" fill="#94a3b8">External</text>
+  <text x="42" y="145" text-anchor="middle" font-size="7.5" fill="#94a3b8">user</text>
+
+  <!-- Customer → JSM: "Raises ticket" arrow (right-pointing at y=105) -->
+  <!-- Customer card right edge x=78, JSM left edge x=82 -->
+  <line x1="78" y1="105" x2="82" y2="105" stroke="#64748b" stroke-width="2" marker-end="url(#aR-t)"/>
+  <text x="42" y="198" text-anchor="middle" font-size="7" fill="#64748b">&#x2191; Raises</text>
+  <text x="42" y="209" text-anchor="middle" font-size="7" fill="#64748b">ticket (S0)</text>
+
+  <!-- JSM → Customer: "Fix notification" arrow (left-pointing at y=270) -->
+  <line x1="82" y1="270" x2="78" y2="270" stroke="#0d9488" stroke-width="2" marker-end="url(#aL-t)"/>
+  <text x="42" y="278" text-anchor="middle" font-size="7" fill="#0d9488">&#x2193; Fix</text>
+  <text x="42" y="289" text-anchor="middle" font-size="7" fill="#0d9488">confirmed</text>
+  <text x="42" y="300" text-anchor="middle" font-size="7" fill="#0d9488">(S11)</text>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- COMPONENT 2: JSM CUSTOMER TICKET BOX   -->
+  <!-- x=82, y=26, w=200, h=358 → right=282   -->
+  <!-- ═══════════════════════════════════════ -->
+  <rect x="82" y="26" width="200" height="358" rx="10" fill="#f0fdfa" stroke="#0d9488" stroke-width="2" filter="url(#cs)"/>
+  <!-- Header -->
+  <rect x="82" y="26" width="200" height="44" rx="10" fill="#0d9488"/>
+  <rect x="82" y="56" width="200" height="14" fill="#0d9488"/>
+  <text x="182" y="44" text-anchor="middle" font-size="10" font-weight="700" fill="white" letter-spacing="0.4">JSM CUSTOMER TICKET</text>
+  <text x="182" y="63" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.85)">Jira Service Management · customer-facing</text>
+
+  <!-- Stage chips inside JSM -->
+  <!-- S0 -->
+  <rect x="96" y="78" width="172" height="30" rx="4" fill="white" stroke="#ccfbf1" stroke-width="1"/>
+  <rect x="96" y="78" width="3" height="30" rx="2" fill="#64748b"/>
+  <text x="107" y="91" font-size="7.5" font-weight="700" fill="#334155">S0 · TICKET CREATED</text>
+  <text x="107" y="102" font-size="7" fill="#64748b">Customer submits via JSM portal</text>
+
+  <!-- S1 -->
+  <rect x="96" y="114" width="172" height="30" rx="4" fill="white" stroke="#ccfbf1" stroke-width="1"/>
+  <rect x="96" y="114" width="3" height="30" rx="2" fill="#0d9488"/>
+  <text x="107" y="127" font-size="7.5" font-weight="700" fill="#0d9488">S1 · CDT TRIAGE</text>
+  <text x="107" y="138" font-size="7" fill="#64748b">Categorized, labeled, routed</text>
+
+  <!-- S2 dashed optional -->
+  <rect x="96" y="150" width="172" height="30" rx="4" fill="white" stroke="#ddd6fe" stroke-width="1" stroke-dasharray="4,3"/>
+  <rect x="96" y="150" width="3" height="30" rx="2" fill="#8b5cf6"/>
+  <text x="107" y="163" font-size="7.5" font-weight="700" fill="#6d28d9">S2 · CLARITY NEEDED</text>
+  <text x="107" y="174" font-size="7" fill="#64748b">CDT/CS follows up with customer</text>
+  <text x="264" y="170" text-anchor="end" font-size="6.5" fill="#8b5cf6" font-style="italic">optional</text>
+
+  <!-- Divider -->
+  <line x1="96" y1="188" x2="268" y2="188" stroke="#99f6e4" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="182" y="199" text-anchor="middle" font-size="7" fill="#94a3b8">— engineering work in CPS + sub-tickets —</text>
+  <line x1="96" y1="206" x2="268" y2="206" stroke="#99f6e4" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- S10 -->
+  <rect x="96" y="213" width="172" height="30" rx="4" fill="white" stroke="#ccfbf1" stroke-width="1"/>
+  <rect x="96" y="213" width="3" height="30" rx="2" fill="#0d9488"/>
+  <text x="107" y="226" font-size="7.5" font-weight="700" fill="#0d9488">S10 · CDT PROD VALIDATION</text>
+  <text x="107" y="237" font-size="7" fill="#64748b">CDT confirms fix works in production</text>
+
+  <!-- S11 -->
+  <rect x="96" y="249" width="172" height="30" rx="4" fill="white" stroke="#ccfbf1" stroke-width="1"/>
+  <rect x="96" y="249" width="3" height="30" rx="2" fill="#0d9488"/>
+  <text x="107" y="262" font-size="7.5" font-weight="700" fill="#0d9488">S11 · CLOSURE + COMMS</text>
+  <text x="107" y="273" font-size="7" fill="#64748b">CDT closes, customer notified of fix</text>
+
+  <!-- S12 dashed -->
+  <rect x="96" y="285" width="172" height="30" rx="4" fill="white" stroke="#fee2e2" stroke-width="1" stroke-dasharray="4,3"/>
+  <rect x="96" y="285" width="3" height="30" rx="2" fill="#e11d48"/>
+  <text x="107" y="298" font-size="7.5" font-weight="700" fill="#be123c">S12 · REOPENED</text>
+  <text x="107" y="309" font-size="7" fill="#64748b">If customer reopens after closure</text>
+  <text x="264" y="305" text-anchor="end" font-size="6.5" fill="#e11d48" font-style="italic">optional</text>
+
+  <!-- JSM Owner badge -->
+  <rect x="96" y="323" width="172" height="52" rx="5" fill="#0d9488" fill-opacity="0.1" stroke="#0d9488" stroke-opacity="0.25" stroke-width="1"/>
+  <text x="182" y="338" text-anchor="middle" font-size="8" font-weight="700" fill="#0d9488">OWNER: CDT</text>
+  <text x="182" y="350" text-anchor="middle" font-size="7" fill="#0f766e">Customer Delight Team</text>
+  <text x="182" y="362" text-anchor="middle" font-size="7" fill="#0f766e">owns full customer ticket lifecycle</text>
+
+  <!-- ── Fast-track labels panel (below customer return arrow) ── -->
+  <rect x="6" y="318" width="72" height="58" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="42" y="333" text-anchor="middle" font-size="7" font-weight="700" fill="#dc2626">&#9889; FAST-TRACK</text>
+  <text x="42" y="345" text-anchor="middle" font-size="6.5" fill="#b91c1c">ESCALATION</text>
+  <text x="42" y="356" text-anchor="middle" font-size="6.5" fill="#b91c1c">ROLLOUT</text>
+  <text x="42" y="367" text-anchor="middle" font-size="6.5" fill="#b91c1c">BLOCKER</text>
+  <text x="42" y="378" text-anchor="middle" font-size="6.5" fill="#b91c1c">HYPERCARE</text>
+
+  <!-- ── Stage 4 shortcut note ── -->
+  <rect x="82" y="392" width="200" height="18" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="182" y="404" text-anchor="middle" font-size="7" fill="#64748b">&#8618; S4 shortcut: no eng. needed &rarr; CDT closes directly</text>
+
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- FORWARD ARROWS: JSM → CPS → Eng             -->
+  <!-- Customer→JSM arrow already drawn above       -->
+  <!-- ═══════════════════════════════════════════ -->
+
+  <!-- COMPONENT 3: CPS TICKET BOX -->
+  <!-- x=326, y=65, w=172, h=278 → right=498, center=412, bottom=343 -->
+  <rect x="326" y="65" width="172" height="278" rx="10" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2" filter="url(#cs)"/>
+  <!-- Header -->
+  <rect x="326" y="65" width="172" height="44" rx="10" fill="#7c3aed"/>
+  <rect x="326" y="95" width="172" height="14" fill="#7c3aed"/>
+  <text x="412" y="83" text-anchor="middle" font-size="10" font-weight="700" fill="white" letter-spacing="0.4">CPS TICKET</text>
+  <text x="412" y="101" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.85)">Customer Problem Solution</text>
+
+  <!-- CPS chips -->
+  <!-- S3 PM creates -->
+  <rect x="340" y="118" width="144" height="30" rx="4" fill="white" stroke="#ddd6fe" stroke-width="1"/>
+  <rect x="340" y="118" width="3" height="30" rx="2" fill="#7c3aed"/>
+  <text x="351" y="131" font-size="7.5" font-weight="700" fill="#6d28d9">S3 · PM CREATES CPS</text>
+  <text x="351" y="142" font-size="7" fill="#64748b">PM scopes, sets acceptance criteria</text>
+
+  <!-- Blocks link -->
+  <rect x="340" y="154" width="144" height="30" rx="4" fill="white" stroke="#ddd6fe" stroke-width="1"/>
+  <rect x="340" y="154" width="3" height="30" rx="2" fill="#7c3aed"/>
+  <text x="351" y="167" font-size="7.5" font-weight="700" fill="#6d28d9">"BLOCKS" LINK TYPE</text>
+  <text x="351" y="178" font-size="7" fill="#64748b">CPS ticket blocks customer ticket</text>
+
+  <!-- Sub-tasks linked -->
+  <rect x="340" y="190" width="144" height="38" rx="4" fill="white" stroke="#ddd6fe" stroke-width="1"/>
+  <rect x="340" y="190" width="3" height="38" rx="2" fill="#7c3aed"/>
+  <text x="351" y="204" font-size="7.5" font-weight="700" fill="#6d28d9">SUB-TASK LINKS</text>
+  <text x="351" y="216" font-size="7" fill="#64748b">Dev opens CIPHER/CUR tickets,</text>
+  <text x="351" y="226" font-size="7" fill="#64748b">links each one back to CPS</text>
+
+  <!-- S5 Engineering Owner -->
+  <rect x="340" y="234" width="144" height="30" rx="4" fill="white" stroke="#ddd6fe" stroke-width="1"/>
+  <rect x="340" y="234" width="3" height="30" rx="2" fill="#7c3aed"/>
+  <text x="351" y="247" font-size="7.5" font-weight="700" fill="#6d28d9">S5 · ENG. OWNER ASSIGNED</text>
+  <text x="351" y="258" font-size="7" fill="#64748b">Pod lead picks up, assigns dev</text>
+
+  <!-- CPS Owner badge -->
+  <rect x="340" y="272" width="144" height="62" rx="5" fill="#7c3aed" fill-opacity="0.1" stroke="#7c3aed" stroke-opacity="0.2" stroke-width="1"/>
+  <text x="412" y="288" text-anchor="middle" font-size="8" font-weight="700" fill="#6d28d9">OWNER: PRODUCT PM</text>
+  <text x="412" y="300" text-anchor="middle" font-size="7" fill="#5b21b6">Sarth · Isha · Pratyusha</text>
+  <text x="412" y="312" text-anchor="middle" font-size="7" fill="#5b21b6">Himanshu · Raaj · Anchal</text>
+  <text x="412" y="326" text-anchor="middle" font-size="7" fill="#5b21b6">each owns their product area</text>
+
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- COMPONENT 4: ENG SUB-TICKETS BOX                  -->
+  <!-- x=543, y=26, w=464, h=358 → right=1007, center=775 -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <rect x="543" y="26" width="464" height="358" rx="10" fill="#fffbeb" stroke="#d97706" stroke-width="2" filter="url(#cs)"/>
+  <!-- Header -->
+  <rect x="543" y="26" width="464" height="44" rx="10" fill="#d97706"/>
+  <rect x="543" y="56" width="464" height="14" fill="#d97706"/>
+  <text x="775" y="44" text-anchor="middle" font-size="10" font-weight="700" fill="white" letter-spacing="0.4">ENGINEERING SUB-TICKETS  (CIPHER / CUR)</text>
+  <text x="775" y="63" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.85)">One ticket per sub-team · each tracks its own status: TO DO &#x2192; IN PROGRESS &#x2192; CODE REVIEW &#x2192; QA &#x2192; DONE</text>
+
+  <!-- Column header row -->
+  <text x="565" y="84" font-size="7.5" font-weight="700" fill="#92400e" letter-spacing="0.5">TEAM</text>
+  <text x="710" y="84" font-size="7.5" font-weight="700" fill="#92400e" letter-spacing="0.5">FOCUS / RESPONSIBILITIES</text>
+  <text x="965" y="84" text-anchor="middle" font-size="7.5" font-weight="700" fill="#92400e" letter-spacing="0.5">STAGES</text>
+  <line x1="558" y1="88" x2="996" y2="88" stroke="#fcd34d" stroke-width="1" opacity="0.7"/>
+
+  <!-- Row 1: Backend/Enigma -->
+  <rect x="558" y="93" width="430" height="46" rx="5" fill="white" stroke="#fef3c7" stroke-width="1"/>
+  <rect x="558" y="93" width="4" height="46" rx="2" fill="#d97706"/>
+  <text x="572" y="112" font-size="8.5" font-weight="700" fill="#92400e">Backend / Enigma</text>
+  <text x="572" y="124" font-size="7.5" fill="#78716c">Core engineering fixes, pipeline logic, data pull &amp; submission issues</text>
+  <text x="572" y="134" font-size="7" fill="#a8a29e">Lead: Rajat Agarwal</text>
+  <text x="965" y="122" text-anchor="middle" font-size="9" font-weight="700" fill="#d97706">S5 &#x2192; S9</text>
+
+  <!-- Row 2: Prompt -->
+  <rect x="558" y="145" width="430" height="46" rx="5" fill="white" stroke="#ede9fe" stroke-width="1"/>
+  <rect x="558" y="145" width="4" height="46" rx="2" fill="#8b5cf6"/>
+  <text x="572" y="164" font-size="8.5" font-weight="700" fill="#6d28d9">Prompt Engineering</text>
+  <text x="572" y="176" font-size="7.5" fill="#78716c">Prompt tuning, AQM accuracy improvements, model behavior changes</text>
+  <text x="572" y="186" font-size="7" fill="#a8a29e">Lead: Sancheeta Kaushal</text>
+  <text x="965" y="174" text-anchor="middle" font-size="9" font-weight="700" fill="#8b5cf6">S5 &#x2192; S9</text>
+
+  <!-- Row 3: DL -->
+  <rect x="558" y="197" width="430" height="46" rx="5" fill="white" stroke="#cffafe" stroke-width="1"/>
+  <rect x="558" y="197" width="4" height="46" rx="2" fill="#0891b2"/>
+  <text x="572" y="216" font-size="8.5" font-weight="700" fill="#0e7490">Deep Learning (DL)</text>
+  <text x="572" y="228" font-size="7.5" fill="#78716c">Z-code prediction, NLP fine-tuning, DL model accuracy improvements</text>
+  <text x="572" y="238" font-size="7" fill="#a8a29e">Lead: SG / Shankar</text>
+  <text x="965" y="226" text-anchor="middle" font-size="9" font-weight="700" fill="#0891b2">S5 &#x2192; S9</text>
+
+  <!-- Row 4: Integrations -->
+  <rect x="558" y="249" width="430" height="46" rx="5" fill="white" stroke="#d1fae5" stroke-width="1"/>
+  <rect x="558" y="249" width="4" height="46" rx="2" fill="#059669"/>
+  <text x="572" y="268" font-size="8.5" font-weight="700" fill="#065f46">Integrations</text>
+  <text x="572" y="280" font-size="7.5" fill="#78716c">Integration pipeline issues, EHR data problems (Mavericks team)</text>
+  <text x="572" y="290" font-size="7" fill="#a8a29e">Lead: Anushil Nandan</text>
+  <text x="965" y="278" text-anchor="middle" font-size="9" font-weight="700" fill="#059669">S5 &#x2192; S9</text>
+
+  <!-- Row 5: QA + CQA -->
+  <rect x="558" y="301" width="430" height="46" rx="5" fill="white" stroke="#fee2e2" stroke-width="1"/>
+  <rect x="558" y="301" width="4" height="46" rx="2" fill="#e11d48"/>
+  <text x="572" y="320" font-size="8.5" font-weight="700" fill="#9f1239">QA Testing + CQA Validation</text>
+  <text x="572" y="332" font-size="7.5" fill="#78716c">Regression testing (S7), Clinical QA sign-off (S8), deployment gate</text>
+  <text x="572" y="342" font-size="7" fill="#a8a29e">CQA sign-off required in writing before any deployment</text>
+  <text x="965" y="330" text-anchor="middle" font-size="9" font-weight="700" fill="#e11d48">S7 &#x2192; S8</text>
+
+  <!-- Status flow strip at bottom of Eng box -->
+  <rect x="558" y="351" width="430" height="28" rx="4" fill="#d97706" fill-opacity="0.12" stroke="#fde68a" stroke-width="1"/>
+  <text x="773" y="362" text-anchor="middle" font-size="7.5" font-weight="700" fill="#92400e">STATUS FLOW PER CIPHER / CUR TICKET:</text>
+  <text x="773" y="374" text-anchor="middle" font-size="7" fill="#78716c">TO DO &rarr; IN PROGRESS &rarr; CODE REVIEW &rarr; QA TESTING &rarr; FOR REGRESSION &rarr; READY TO DEPLOY &rarr; DONE</text>
+
+
+  <!-- ═══════════════════════════════ -->
+  <!-- FORWARD FLOW ARROWS            -->
+  <!-- JSM → CPS (main forward arrow) -->
+  <line x1="284" y1="155" x2="324" y2="155" stroke="#7c3aed" stroke-width="2" marker-end="url(#aR-p)"/>
+  <!-- Label above -->
+  <rect x="286" y="136" width="36" height="15" rx="3" fill="#7c3aed"/>
+  <text x="304" y="147" text-anchor="middle" font-size="7" font-weight="700" fill="white">S3</text>
+  <text x="304" y="166" text-anchor="middle" font-size="7.5" fill="#6d28d9">PM scopes</text>
+
+  <!-- CPS → Eng (main forward arrow) -->
+  <line x1="500" y1="155" x2="541" y2="155" stroke="#d97706" stroke-width="2" marker-end="url(#aR-a)"/>
+  <!-- Label above -->
+  <rect x="501" y="136" width="36" height="15" rx="3" fill="#d97706"/>
+  <text x="519" y="147" text-anchor="middle" font-size="7" font-weight="700" fill="white">S5</text>
+  <text x="519" y="166" text-anchor="middle" font-size="7.5" fill="#b45309">Pod lead</text>
+  <text x="519" y="176" text-anchor="middle" font-size="7.5" fill="#b45309">picks up</text>
+
+  
+
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- RETURN FLOW                                         -->
+  <!-- Vertical drops → horizontal return lane → customer  -->
+  <!-- ═══════════════════════════════════════════════════ -->
+
+  <!-- Vertical connector: Eng → return lane (y=420) -->
+  <line x1="775" y1="384" x2="775" y2="420" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <rect x="762" y="387" width="26" height="13" rx="3" fill="#d97706"/>
+  <text x="775" y="397" text-anchor="middle" font-size="7.5" font-weight="700" fill="white">S9</text>
+
+  <!-- Vertical connector: CPS → return lane -->
+  <line x1="412" y1="343" x2="412" y2="420" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <rect x="399" y="372" width="26" height="13" rx="3" fill="#7c3aed"/>
+  <text x="412" y="382" text-anchor="middle" font-size="7.5" font-weight="700" fill="white">S10</text>
+
+  <!-- Vertical connector: JSM → return lane -->
+  <line x1="182" y1="384" x2="182" y2="420" stroke="#0d9488" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <rect x="169" y="387" width="26" height="13" rx="3" fill="#0d9488"/>
+  <text x="182" y="397" text-anchor="middle" font-size="7.5" font-weight="700" fill="white">S11</text>
+
+  <!-- Segment labels: white bg, positioned ABOVE the return arrow -->
+  <rect x="550" y="407" width="218" height="11" rx="2" fill="white" fill-opacity="0.9"/>
+  <text x="659" y="416" text-anchor="middle" font-size="7" font-weight="700" fill="#92400e">All sub-tasks done &rarr; CPS closes (S9)</text>
+
+  <rect x="186" y="407" width="220" height="11" rx="2" fill="white" fill-opacity="0.9"/>
+  <text x="296" y="416" text-anchor="middle" font-size="7" font-weight="700" fill="#0f766e">CDT validates &amp; closes customer ticket (S10&ndash;S11)</text>
+
+  <!-- Return horizontal arrow at y=420, left-pointing -->
+  <line x1="773" y1="420" x2="184" y2="420" stroke="#475569" stroke-width="2" marker-end="url(#aL-t)"/>
+
+  <!-- JSM→Customer return arrow drawn in customer annotations -->
+
+  <!-- ── Decorative: "System Boundary" labels under each main box ── -->
+  <text x="182" y="463" text-anchor="middle" font-size="7.5" font-weight="600" fill="#0d9488">JSM Board</text>
+  <text x="412" y="463" text-anchor="middle" font-size="7.5" font-weight="600" fill="#7c3aed">CPS Board</text>
+  <text x="775" y="463" text-anchor="middle" font-size="7.5" font-weight="600" fill="#d97706">CIPHER / CUR Boards</text>
+
+  <!-- ── Vertical system separators (subtle dashed lines) ── -->
+  <line x1="308" y1="30" x2="308" y2="436" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="6,4"/>
+  <line x1="524" y1="30" x2="524" y2="436" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="6,4"/>
+
+</svg>
+    </div><!-- arch-svg-wrap -->
+
+    <div class="arch-footnotes">
+      <div class="arch-fn" style="color:#dc2626;">&#9889; <strong>Fast-track triggers</strong> (any stage): <code>ESCALATION</code> — founders involved; <code>ESCALATED</code> — formally escalated via CS; <code>ROLLOUT_BLOCKERS</code> — blocking a go-live; <code>HYPERCARE</code> — post-launch heightened monitoring.</div>
+      <div class="arch-fn">&#8618; <strong>Stage 4 shortcut:</strong> if no engineering is needed, CDT closes the customer ticket directly without creating a CPS or sub-tickets.</div>
+      <div class="arch-fn" style="font-style:italic;">Dashed chips in the JSM box (S2, S12) represent conditional paths, not every ticket goes through them.</div>
+    </div>
+  </div><!-- arch-inner -->
+</div><!-- arch-section -->
+
+<div class="layout">
+
+  <!-- STICKY NAV -->
+  <nav class="stage-nav" aria-label="Jump to stage">
+    <a class="nav-item" href="#stage-0"><div class="nav-circle cs">S0</div><span class="nav-label">Ticket Creation</span></a>
+    <div class="nav-connector"></div>
+    <a class="nav-item" href="#stage-1"><div class="nav-circle cdt">S1</div><span class="nav-label">Triaging</span></a>
+    <div class="nav-connector"></div>
+    <a class="nav-item" href="#stage-2"><div class="nav-circle prod">S2</div><span class="nav-label">Clarification</span></a>
+    <div class="nav-connector"></div>
+    <a class="nav-item" href="#stage-3"><div class="nav-circle prod">S3</div><span class="nav-label">Scoping</span></a>
+    <div class="nav-connector"></div>
+    <a class="nav-item" href="#stage-4"><div class="nav-circle cdt">S4</div><span class="nav-label">Non-Eng Closure</span></a>
+    <div class="nav-connector"></div>
+    <a class="nav-item" href="#stage-5"><div class="nav-circle eng">S5</div><span class="nav-label">Eng Pickup</span></a>
+    <div class="nav-connector"></div>
+    <a class="nav-item" href="#stage-6"><div class="nav-circle eng">S6</div><span class="nav-label">Dev Clarity</span></a>
+    <div class="nav-connector"></div>
+    <a class="nav-item" href="#stage-7"><div class="nav-circle eng">S7</div><span class="nav-label">Regression</span></a>
+    <div class="nav-connector"></div>
+    <a class="nav-item" href="#stage-8"><div class="nav-circle cqa">S8</div><span class="nav-label">CQA Validation</span></a>
+    <div class="nav-connector"></div>
+    <a class="nav-item" href="#stage-9"><div class="nav-circle eng">S9</div><span class="nav-label">Deployment</span></a>
+    <div class="nav-connector"></div>
+    <a class="nav-item" href="#stage-10"><div class="nav-circle cdt">S10</div><span class="nav-label">CDT Review</span></a>
+    <div class="nav-connector"></div>
+    <a class="nav-item" href="#stage-11"><div class="nav-circle cdt">S11</div><span class="nav-label">Closure</span></a>
+    <div class="nav-connector"></div>
+    <a class="nav-item" href="#stage-12"><div class="nav-circle cdt">S12</div><span class="nav-label">Reopened</span></a>
+    <div class="nav-connector"></div>
+    <a class="nav-item" href="#esc"><div class="nav-circle esc">⚡</div><span class="nav-label">Escalation</span></a>
+  </nav>
+
+  <div class="main-content">
+
+    <!-- ══════════ STAGE 0 ══════════ -->
+    <div class="stage-card cs" id="stage-0">
+      <div class="stage-header">
+        <div class="stage-meta">
+          <span class="stage-eyebrow">Stage 0</span>
+          <h2 class="stage-name">Ticket Creation</h2>
+          <div class="stage-trigger-inline">Customer raises an issue, a new ticket is born</div>
+        </div>
+        <div class="owner-chip cs">Customer / CS</div>
+        <div class="stage-ghost">0</div>
+      </div>
+      <div class="stage-body">
+
+        <div>
+          <div class="section-label">Actions</div>
+          <ul class="actions-list">
+            <li><div class="action-num">1</div><span>Create the ticket in the right JSM project for the customer (EHCS, FCS, MCS, CARCS, MHSUPPORT, etc.)</span></li>
+            <li><div class="action-num">2</div><span>Fill all required fields at creation, especially <strong>Organization</strong>, <strong>Impact</strong>, and at least one <strong>Example Chart / Encounter ID</strong></span></li>
+            <li><div class="action-num">3</div><span>Describe: what the system did vs. what was expected. Be specific, vague descriptions will be returned for clarification.</span></li>
+            <li><div class="action-num">4</div><span>Leave <strong>Priority</strong> and <strong>Issue Category</strong> at default, CDT sets these at triage</span></li>
+          </ul>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <div class="section-label">Jira Updates at Creation</div>
+            <ul class="jira-list">
+              <li><span class="field-name">Status:</span>&nbsp;<span class="status-pill sp-open">Open</span></li>
+              <li><span class="field-name">Triaged:</span>&nbsp;No (default)</li>
+              <li><span class="field-name">Assignee:</span>&nbsp;Default CDT assignee</li>
+              <li><span class="field-name">Priority:</span>&nbsp;Default (do not touch)</li>
+              <li><span class="field-name">Organization:</span>&nbsp;[Customer name]</li>
+              <li><span class="field-name">Impact:</span>&nbsp;Describe clearly</li>
+              <li><span class="field-name">Issue Type:</span>&nbsp;Bug / Question / Enhancement</li>
+              <li><span class="field-name">Encounter / Example:</span>&nbsp;Minimum 1 chart ID</li>
+            </ul>
+          </div>
+          <div>
+            <div class="section-label">Done When</div>
+            <div class="done-box">
+              <ul>
+                <li>Ticket created in correct JSM project</li>
+                <li>Status = <span class="status-pill sp-open">Open</span>, Triaged = No</li>
+                <li>At least one example chart/encounter provided</li>
+                <li>Observed vs. expected behavior clearly described</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label">Rules</div>
+          <ul class="rules-list">
+            <li>Never set Priority yourself, this causes noise in CDT's triage queue and will be overridden anyway</li>
+            <li>No example chart = ticket will be returned to Waiting for Customer immediately. Save everyone's time and include one upfront.</li>
+            <li>"Reply to Customer" is customer-visible. "Add Internal Note" is internal-only. Never confuse them.</li>
+          </ul>
+        </div>
+
+        <div class="next-stage-bar">
+          <span class="ns-label">Next &rarr;</span>
+          <div class="ns-route"><span class="ns-dest">Stage 1 &mdash; Triaging (CDT picks up within 24 hrs)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ STAGE 1 ══════════ -->
+    <div class="stage-card cdt" id="stage-1">
+      <div class="stage-header">
+        <div class="stage-meta">
+          <span class="stage-eyebrow">Stage 1</span>
+          <h2 class="stage-name">Triaging</h2>
+          <div class="stage-trigger-inline">Ticket arrives in Open with Triaged = No · SLA: within 24 hours</div>
+        </div>
+        <div class="owner-chip cdt">CDT</div>
+        <div class="stage-ghost">1</div>
+      </div>
+      <div class="stage-body">
+
+        <div>
+          <div class="section-label">Actions</div>
+          <ul class="actions-list">
+            <li class="gap"><div class="action-num">1</div><span>Review the ticket. If it covers <strong>multiple distinct problems</strong>, split it into separate tickets before triaging, one ticket = one problem <span class="gap-tag">Not followed today</span></span></li>
+            <li><div class="action-num">2</div><span>Determine <strong>Issue Category</strong> from the taxonomy below</span></li>
+            <li><div class="action-num">3</div><span>Set <strong>Priority</strong> (P0/P1/P2/P3) based on customer sentiment, contract value, issue type, and whether the customer has explicitly flagged urgency</span></li>
+            <li><div class="action-num">4</div><span>Set the <strong>Product Area</strong> field (<code>customfield_10902</code> in Jira). This is a label-picker field, not a dropdown — type and select the correct value from the list below. Routing to the right POD depends on this field being set correctly.</span></li>
+            <li><div class="action-num">5</div><span>Add an <strong>Internal Note</strong> with your initial RCA hypothesis, one or two sentences is enough</span></li>
+            <li><div class="action-num">6</div><span>Set Triaged = Yes and route to the right next stage (see Hand Off below)</span></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="section-label">Issue Category — Pick Exactly One</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">Blue border = no engineering needed &nbsp;·&nbsp; Orange border = engineering needed</div>
+          <div class="taxonomy-grid">
+            <div class="tax-item eng"><span class="tax-name">Bug</span><span class="tax-desc">Pipeline output wrong per approved SOP/PRD. Owner: Enigmas / DL / Prompt. Route to Stage 3.</span></div>
+            <div class="tax-item eng"><span class="tax-name">SOP Update</span><span class="tax-desc">New addition or full replacement of SOP content from client or guidelines. Owner: Product team. Route to Stage 3.</span></div>
+            <div class="tax-item eng"><span class="tax-name">Enhancement</span><span class="tax-desc">Improving or adding to existing functionality in SOP/PRD. Owner: Product team. Route to Stage 3.</span></div>
+            <div class="tax-item eng"><span class="tax-name">Regression</span><span class="tax-desc">Was working before, now broken. Route to Stage 3 with status → <span class="status-pill sp-disc">Discovery</span><span class="pending-tag">Not in Jira yet</span>. Owner: Engineering.</span></div>
+            <div class="tax-item eng"><span class="tax-name">Data pull issue</span><span class="tax-desc">Missing slips, data pull failures, cron issues, data availability problems. Owner: Mavericks / Anushil. Route to Stage 3.</span></div>
+            <div class="tax-item eng"><span class="tax-name">Submission issue</span><span class="tax-desc">Claim submission, supervising provider logic, validation failures. Owner: Mavericks / Anushil. Route to Stage 3.</span></div>
+            <div class="tax-item no-eng"><span class="tax-name">Product tasks (self serve)</span><span class="tax-desc">PFP updates, pathfinder, carve out, modifier toggles, NTE changes via self-serve tools. Owner: Product team. Route to Stage 4.</span></div>
+            <div class="tax-item no-eng"><span class="tax-name">Self Serve Bug</span><span class="tax-desc">Existing self-serve workflow not working as expected. Owner: Product team. Route to Stage 4.</span></div>
+            <div class="tax-item no-eng"><span class="tax-name">CS tasks (self serve)</span><span class="tax-desc">Onboarding/offboarding, provider assist/autonomous, waiting-for-customer cases. Owner: CS team. Route to Stage 4.</span></div>
+            <div class="tax-item no-eng"><span class="tax-name">Clarity Needed</span><span class="tax-desc">Customer input needed before ticket can be scoped. Owner: CS team (Athena: Liz/Kim; Epic: Susan/Paul; EHR: John). Route to Stage 2.</span></div>
+            <div class="tax-item no-eng"><span class="tax-name">IAT error</span><span class="tax-desc">Coder error by internal audit team, not pipeline. Owner: Res Coding SPOCs (Athena: Kanak; Epic: Gayathri). If IAT + pipeline error, route to Stage 3 as well.</span></div>
+            <div class="tax-item no-eng"><span class="tax-name">PII tasks</span><span class="tax-desc">EHR ingestion, validator problems, PII-sensitive data flows. Owner: PII team (John / Andrew). Route to Stage 4.</span></div>
+            <div class="tax-item no-eng"><span class="tax-name">DevOps</span><span class="tax-desc">IP address changes, Codex access, infrastructure access. Owner: DevOps (Ram / Ajay). Route to Stage 4.</span></div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <div class="section-label">Jira Updates</div>
+            <ul class="jira-list">
+              <li><span class="field-name">Triaged:</span>&nbsp;No <span class="arrow">to</span> <strong>Yes</strong></li>
+              <li><span class="field-name">Status:</span>&nbsp;<span class="status-pill sp-open">Open</span> <span class="arrow">to</span> <span class="status-pill sp-disc">Discovery</span><span class="pending-tag">Not in Jira yet</span> (or <span class="status-pill sp-wait">Waiting for Customer</span> if Clarity Needed)</li>
+              <li><span class="field-name">Assignee:</span>&nbsp;Product PM (by product area) if engineering needed; else CDT/IAT/Data lead</li>
+              <li><span class="field-name">Priority:</span>&nbsp;P0 / P1 / P2 / P3</li>
+              <li><span class="field-name">Issue Category:</span>&nbsp;[set]</li>
+              <li><span class="field-name">Product Area:</span>&nbsp;Labels-associated field only, NOT dropdown</li>
+            </ul>
+          </div>
+          <div>
+            <div class="section-label">Done When</div>
+            <div class="done-box">
+              <ul>
+                <li>Triaged = Yes</li>
+                <li>Issue Category set</li>
+                <li>Priority set (not default)</li>
+                <li>Product Area set (labels field)</li>
+                <li>Internal Note with RCA hypothesis added</li>
+                <li>Ticket routed to correct next owner</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label">Hand Off To</div>
+          <div class="handoff-grid">
+            <div class="handoff-item"><span>Clarity Needed</span><span class="handoff-arrow">→</span><span class="handoff-dest">Stage 2 (CS team)</span></div>
+            <div class="handoff-item"><span>Bug / SOP Update / Enhancement / Regression / Data pull issue / Submission issue</span><span class="handoff-arrow">→</span><span class="handoff-dest">Stage 3 (Product PM)</span></div>
+            <div class="handoff-item"><span>Product tasks (self serve) / Self Serve Bug / CS tasks (self serve) / PII tasks / DevOps</span><span class="handoff-arrow">→</span><span class="handoff-dest">Stage 4 (Product / CS / DevOps)</span></div>
+            <div class="handoff-item"><span>IAT error (pure)</span><span class="handoff-arrow">→</span><span class="handoff-dest">Res Coding SPOCs (Athena: Kanak / Epic: Gayathri)</span></div>
+            <div class="handoff-item"><span>ESCALATION / ESCALATED label present (applied by CS)</span><span class="handoff-arrow">→</span><span class="handoff-dest">Trigger Escalation Fast-Track ⚡ simultaneously</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label">Rules</div>
+          <ul class="rules-list">
+            <li class="gap">24-hour SLA for triage, a ticket in Open with Triaged = No for more than 24 hours is a miss <span class="gap-tag">Not followed today</span></li>
+            <li>NEVER use the dropdown for Product Area, labels-associated field only. This is what the dashboard and reports read.</li>
+            <li>Multi-problem ticket: split BEFORE routing, one ticket per problem</li>
+            <li>IAT error that compounds a pipeline error → do NOT close here; send to engineering</li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="section-label">SLA Reference (for Priority setting)</div>
+          <div class="sla-row">
+            <div class="sla-chip"><b>P0</b>Escalation / founders involved · Scoped in 24hr · Fixed in 3 days</div>
+            <div class="sla-chip"><b>P1</b>High priority · Fixed in 4 days</div>
+            <div class="sla-chip"><b>P2</b>Medium · Fixed in 2 weeks</div>
+            <div class="sla-chip"><b>P3/P4</b>Low priority · Fixed in 1 month+</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label">Auto-Triage Bot: Do Not Ignore</div>
+          <div class="done-box">
+            An automated triage bot classifies priority and team in ticket comments on ~54% of tickets. CDT must validate its output, if the bot's classification matches, use it. If it's wrong, correct it with an Internal Note explaining why. Do not silently discard it. The bot's signal is accurate more often than the manual priority field.
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label">Label Reference</div>
+          <div class="taxonomy-grid">
+            <div class="tax-item" style="border-left:3px solid var(--esc)"><span class="tax-name">ESCALATION</span><span class="tax-desc">Founders involved. Needs resolution today/yesterday.</span></div>
+            <div class="tax-item" style="border-left:3px solid var(--esc)"><span class="tax-name">ESCALATED</span><span class="tax-desc">Formally escalated through CS leadership.</span></div>
+            <div class="tax-item" style="border-left:3px solid var(--esc)"><span class="tax-name">ROLLOUT_BLOCKER</span><span class="tax-desc">Blocking a committed go-live date.</span></div>
+            <div class="tax-item" style="border-left:3px solid var(--cdt)"><span class="tax-name">HYPERCARE</span><span class="tax-desc">New customer in hypercare period. Elevated urgency, tighter communication expectation.</span></div>
+            <div class="tax-item" style="border-left:3px solid var(--prod)"><span class="tax-name">JUNE_PRIORITY / MAY_PRIORITY</span><span class="tax-desc">Sprint-level priority workaround. Do NOT use these instead of setting the Priority field, set both.</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label">Status Name Note: Differs by Project Board</div>
+          <div class="done-box" style="font-size:12.5px">
+            Different JSM project boards use different names for the same conceptual status. <strong>"Open State"</strong> (ANCS, MERCS, RCS, AHFCS, HECS) and <strong>"To Do"</strong> (EHCS, CPS, CIPHER) both mean the starting state. When this document says a status name, apply the equivalent in your project's board.
+          </div>
+        </div>
+
+
+        <details class="template-block">
+          <summary>📋 Triage Acknowledgement &mdash; Reply to Customer <span class="tpl-timing">Post immediately after triage</span><span class="tpl-owner-chip">CDT</span></summary>
+          <div class="template-body">
+            <div class="tpl-note">Select the <strong>[MODULE_NAME]</strong> and <strong>[MODULE_DESCRIPTION]</strong> from the Index tab in <em>CDT_Communication_Templates_v2.xlsx</em>. Each product area has its own module name and one-line description. Do NOT wait for root cause before sending this.</div>
+            <pre class="tpl-pre">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+Thank you for raising this. We have completed an initial review of your ticket.
+
+Based on our initial review, this ticket appears to be related to our <span class="ph">[MODULE_NAME]</span> &mdash; <span class="ph">[MODULE_DESCRIPTION]</span>.
+
+Our team is now conducting a detailed investigation. We will share a full update by <span class="ph">[DATE]</span>.
+
+If you have additional examples or CSNs that would help us reproduce the issue, please add them to this ticket.
+
+Thank you,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+            <div class="tpl-ph-guide">
+              <div class="ph-label">Placeholders to fill before posting</div>
+              <ul>
+                <li><code>[CUSTOMER_NAME]</code> &rarr; customer&#39;s first name</li>
+                <li><code>[MODULE_NAME]</code> &rarr; e.g. &ldquo;E&amp;M (Evaluation &amp; Management) Prediction Module&rdquo; &mdash; from Index sheet</li>
+                <li><code>[MODULE_DESCRIPTION]</code> &rarr; one-line module description &mdash; from Index sheet</li>
+                <li><code>[DATE]</code> &rarr; expected date of next full update to customer</li>
+                <li><code>[CDT_REP_NAME]</code> &rarr; your name</li>
+              </ul>
+            </div>
+            <button class="copy-btn" onclick="copyTpl(this)">Copy template</button>
+          </div>
+        </details>
+
+        <div class="next-stage-bar">
+          <span class="ns-label">Next &rarr;</span>
+          <div class="ns-route"><span class="ns-cond">Clarity Needed</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 2 (Waiting for Customer Clarity)</span></div>
+          <div class="ns-route"><span class="ns-cond">Bug / Enhancement / SOP Update</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 3 (Product Scoping)</span></div>
+          <div class="ns-route"><span class="ns-cond">Self-Serve / IAT / Non-Issue / Reporting</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 4 (Non-Eng Closure)</span></div>
+          <div class="ns-route"><span class="ns-cond">ESCALATION or ESCALATED label applied</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">&#9889; Escalation Fast-Track (parallel to all stages)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ STAGE 2 ══════════ -->
+    <div class="stage-card prod" id="stage-2">
+      <div class="stage-header">
+        <div class="stage-meta">
+          <span class="stage-eyebrow">Stage 2</span>
+          <h2 class="stage-name">Product Clarification</h2>
+          <div class="stage-trigger-inline">Issue Category = Clarity Needed · Inputs are insufficient to scope</div>
+        </div>
+        <div class="owner-chip prod">Product / CDT</div>
+        <div class="stage-ghost">2</div>
+      </div>
+      <div class="stage-body">
+
+        <div>
+          <div class="section-label">Actions</div>
+          <ul class="actions-list">
+            <li><div class="action-num">1</div><span>Identify exactly what information is missing, be specific; vague questions cause further back-and-forth</span></li>
+            <li><div class="action-num">2</div><span>Draft a clear, direct question. Post it via <strong>"Reply to Customer"</strong> (customer-visible), NOT via Internal Note</span></li>
+            <li><div class="action-num">3</div><span>Log an <strong>Internal Note</strong> documenting: what you asked, who you asked, and when you expect a response</span></li>
+            <li><div class="action-num">4</div><span>Set status to <span class="status-pill sp-wait">Waiting for Customer</span></span></li>
+            <li><div class="action-num">5</div><span>Monitor for response. Stale ticket rules apply (see Rules below)</span></li>
+          </ul>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <div class="section-label">Jira Updates</div>
+            <ul class="jira-list">
+              <li><span class="field-name">Status:</span>&nbsp;<span class="arrow">to</span> <span class="status-pill sp-wait">Waiting for Customer</span></li>
+              <li><span class="field-name">Issue Category:</span>&nbsp;Clarity Needed</li>
+              <li><span class="field-name">Reply to Customer:</span>&nbsp;Post your specific question</li>
+              <li><span class="field-name">Internal Note:</span>&nbsp;What you asked, from whom, when</li>
+            </ul>
+          </div>
+          <div>
+            <div class="section-label">Done When</div>
+            <div class="done-box">
+              <ul>
+                <li>Customer responds with sufficient detail</li>
+                <li>Return to Stage 1 for re-triage OR directly to Stage 3 if already triaged and scoping can now proceed</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label">Stale Ticket Rule (owner: Jasmeet Singh)</div>
+          <ul class="actions-list">
+            <li class="gap"><div class="action-num">1</div><span>48 hrs no response → CS team sends Follow-Up Attempt 1 (use standard template) <span class="gap-tag">Not followed today</span></span></li>
+            <li><div class="action-num">2</div><span>48 hrs more no response → Follow-Up Attempt 2</span></li>
+            <li class="gap"><div class="action-num">3</div><span>48 hrs more no response → Close the ticket. Post "Reply to Customer" explaining closure. Log in Internal Note. <span class="gap-tag">Not followed today</span></span></li>
+          </ul>
+        </div>
+
+        <details class=”template-block”>
+          <summary>📋 Customer Follow-up Templates &mdash; Both Variants <span class="tpl-timing">Waiting for info · Waiting for confirmation</span><span class="tpl-owner-chip">CDT (Jasmeet)</span></summary>
+          <div class="template-body">
+            <div class="tpl-note">Use <strong>Variant 1</strong> when waiting for customer to provide information. Use <strong>Variant 2</strong> when a resolution was already shared and awaiting customer confirmation. Send at 3 business days, 5 days, 7 days, then close.</div>
+
+            <div class="variant-header">&#9656; Variant 1 &mdash; Following up on information requested</div>
+            <div class="attempt-grid">
+              <div class="attempt-card">
+                <div class="attempt-label">Attempt 1</div>
+                <div class="attempt-timing">3 business days after initial request</div>
+                <pre class="tpl-pre-sm">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+I hope you&#39;re doing well. I&#39;m following up on our previous message from <span class="ph">[DATE]</span> regarding this ticket.
+
+We are still waiting on <span class="ph">[WHAT_IS_NEEDED]</span> to proceed with our investigation.
+
+Whenever you get a chance, please share <span class="ph">[WHAT_IS_NEEDED]</span> and we will pick this up right away.
+
+Thank you,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+                <button class="copy-btn" onclick="copyTpl(this)">Copy</button>
+              </div>
+              <div class="attempt-card">
+                <div class="attempt-label">Attempt 2</div>
+                <div class="attempt-timing">5 business days after initial request</div>
+                <pre class="tpl-pre-sm">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+I wanted to check in once more on this ticket. We are still awaiting <span class="ph">[WHAT_IS_NEEDED]</span> that we requested on <span class="ph">[DATE]</span>.
+
+Your response will help us move forward with the investigation as quickly as possible. If it would be easier to jump on a quick call, please let us know and we can arrange that.
+
+Thank you,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+                <button class="copy-btn" onclick="copyTpl(this)">Copy</button>
+              </div>
+              <div class="attempt-card">
+                <div class="attempt-label">Attempt 3 &mdash; Final Notice</div>
+                <div class="attempt-timing">7 business days after initial request</div>
+                <pre class="tpl-pre-sm">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+This is our final follow-up on this ticket. We have reached out a few times regarding <span class="ph">[WHAT_IS_NEEDED]</span> and have not yet heard back.
+
+If we do not receive a response by <span class="ph">[CLOSE_DATE]</span>, we will close this ticket to keep our queue up to date. You are always welcome to reopen it or raise a new ticket if you would like to revisit this.
+
+Thank you for your understanding,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+                <button class="copy-btn" onclick="copyTpl(this)">Copy</button>
+              </div>
+              <div class="attempt-card">
+                <div class="attempt-label">No-Response Closure</div>
+                <div class="attempt-timing">Post when closing the ticket</div>
+                <pre class="tpl-pre-sm">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+As we have not received the requested information after multiple follow-ups, we are closing this ticket at this time.
+
+If you would like to continue the investigation in the future, please feel free to open a new ticket and we will pick this up from where we left off.
+
+Thank you,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+                <button class="copy-btn" onclick="copyTpl(this)">Copy</button>
+              </div>
+            </div>
+
+            <div class="variant-header">&#9656; Variant 2 &mdash; Following up on resolution already provided</div>
+            <div class="attempt-grid">
+              <div class="attempt-card">
+                <div class="attempt-label">Attempt 1</div>
+                <div class="attempt-timing">3 business days after resolution comment</div>
+                <pre class="tpl-pre-sm">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+I hope you&#39;re well. I&#39;m following up on the update we shared on <span class="ph">[DATE]</span> for this ticket.
+
+We wanted to check if you&#39;ve had a chance to verify the change on your end. Please let us know if everything looks good, or if you&#39;ve noticed anything that needs further attention.
+
+Thank you,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+                <button class="copy-btn" onclick="copyTpl(this)">Copy</button>
+              </div>
+              <div class="attempt-card">
+                <div class="attempt-label">Attempt 2</div>
+                <div class="attempt-timing">5 business days after resolution comment</div>
+                <pre class="tpl-pre-sm">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+Just a gentle reminder &mdash; we shared a resolution for this ticket on <span class="ph">[DATE]</span> and are waiting to hear from you.
+
+If the fix is working as expected, a quick confirmation from your end will allow us to close this out. If you have noticed any remaining issues, please share the details and we will look into them.
+
+Thank you,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+                <button class="copy-btn" onclick="copyTpl(this)">Copy</button>
+              </div>
+              <div class="attempt-card">
+                <div class="attempt-label">Attempt 3 &mdash; Final Notice</div>
+                <div class="attempt-timing">7 business days after resolution comment</div>
+                <pre class="tpl-pre-sm">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+This is our final follow-up on this ticket. We shared a resolution on <span class="ph">[DATE]</span> and have reached out a couple of times to confirm it is working on your end.
+
+If we do not hear back by <span class="ph">[CLOSE_DATE]</span>, we will go ahead and close this ticket as the fix has been successfully deployed on our side. Should any issues resurface, please open a new ticket.
+
+Thank you for your understanding,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+                <button class="copy-btn" onclick="copyTpl(this)">Copy</button>
+              </div>
+              <div class="attempt-card">
+                <div class="attempt-label">No-Response Closure</div>
+                <div class="attempt-timing">Post when closing the ticket</div>
+                <pre class="tpl-pre-sm">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+As we have not received a confirmation after multiple follow-ups, we are proceeding with closing this ticket. The resolution shared on <span class="ph">[DATE]</span> remains in place.
+
+If you notice any further issues or would like to revisit this, please open a new ticket and we will be glad to help.
+
+Thank you,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+                <button class="copy-btn" onclick="copyTpl(this)">Copy</button>
+              </div>
+            </div>
+
+            <div class="tpl-ph-guide" style="margin-top:12px;">
+              <div class="ph-label">Placeholders common to all variants</div>
+              <ul>
+                <li><code>[CUSTOMER_NAME]</code> &rarr; customer&#39;s name</li>
+                <li><code>[CDT_REP_NAME]</code> &rarr; your name</li>
+                <li><code>[DATE]</code> &rarr; date of original request or resolution comment</li>
+                <li><code>[WHAT_IS_NEEDED]</code> &rarr; e.g. &ldquo;the CSN(s) for the affected encounters&rdquo;</li>
+                <li><code>[CLOSE_DATE]</code> &rarr; specific date you will close if no reply (e.g. 2 business days from now)</li>
+              </ul>
+            </div>
+          </div>
+        </details>
+
+        <div>
+          <div class="section-label">Rules</div>
+          <ul class="rules-list">
+            <li>NEVER use "Internal Note" when asking the customer a question, it is invisible to them. Always use "Reply to Customer".</li>
+            <li>Do not let a ticket sit in Waiting for Customer without a logged follow-up attempt in the Internal Note thread</li>
+            <li>If customer responds partially (not fully), stay in Stage 2, do not proceed to Stage 3 with incomplete inputs</li>
+          </ul>
+        </div>
+
+        <div class="next-stage-bar">
+          <span class="ns-label">Next &rarr;</span>
+          <div class="ns-route"><span class="ns-cond">Customer responds &mdash; re-triage needed</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 1 (Triaging)</span></div>
+          <div class="ns-route"><span class="ns-cond">Customer responds &mdash; scope is clear</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 3 (Product Scoping)</span></div>
+          <div class="ns-route"><span class="ns-cond">No response after 3 attempts</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Close ticket (Stage 11 comms template)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ STAGE 3 ══════════ -->
+    <div class="stage-card prod" id="stage-3">
+      <div class="stage-header">
+        <div class="stage-meta">
+          <span class="stage-eyebrow">Stage 3</span>
+          <h2 class="stage-name">Product Scoping</h2>
+          <div class="stage-trigger-inline">Status = Discovery · Issue Category = Bug / Enhancement / SOP Update · Triaged = Yes</div>
+        </div>
+        <div class="owner-chip prod">Product PM</div>
+        <div class="stage-ghost">3</div>
+      </div>
+      <div class="stage-body">
+
+        <div>
+          <div class="section-label">Actions</div>
+          <ul class="actions-list">
+            <li><div class="action-num">1</div><span>Review CDT's triage. Validate Issue Category and Product Area, correct them if needed (with an Internal Note explaining the change)</span></li>
+            <li><div class="action-num">2</div><span>Scope the problem fully: define <strong>expected behavior</strong>, <strong>actual behavior</strong>, and <strong>acceptance criteria</strong> for the fix</span></li>
+            <li class="gap"><div class="action-num">3</div><span>Check if the same issue exists at other customers, if yes, scope one fix for all; link all affected customer tickets to a single CPS ticket <span class="gap-tag">Not followed today</span></span></li>
+            <li><div class="action-num">4</div><span>Create a <strong>CPS (Customer Problem Solution) ticket</strong></span></li>
+            <li class="gap"><div class="action-num">5</div><span>Link the CPS ticket to the customer ticket with link type <strong>"blocks"</strong> or <strong>"causes"</strong>, never "relates to" <span class="gap-tag">Not followed today</span></span></li>
+            <li><div class="action-num">6</div><span>Set the <strong>Product Area</strong> field on the CPS ticket at creation time. The Jira automation will auto-assign the Pod Lead and add the Pod component based on this field. If Product Area is skipped, the CPS ticket lands unassigned and the automation does not fire.</span></li>
+            <li class="gap"><div class="action-num">7</div><span>Move customer ticket status to <span class="status-pill sp-discDone">Discovery Done</span><span class="pending-tag">Not in Jira yet</span> <span class="gap-tag">Not followed today</span></span></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="section-label">Pod → PM &amp; Pod Lead Assignment</div>
+          <table class="mini-table">
+            <thead><tr><th>Pod</th><th>PM Owner</th><th>PM Backup</th><th>Pod Lead (Engg)</th></tr></thead>
+            <tbody>
+              <tr><td>EnM</td><td>Sarth</td><td>Isha</td><td>Praneeth</td></tr>
+              <tr><td>ICD Coding</td><td>Sarth</td><td>Raaj</td><td>Nishant</td></tr>
+              <tr><td>Linking &amp; Sequencing <span style="font-size:10px;color:var(--text-muted)">(ICD Pod)</span></td><td>Prathyusha</td><td>N/A</td><td>Nishant</td></tr>
+              <tr><td>CPT</td><td>Pratyusha, Himanshu</td><td>N/A</td><td>Abhishek Singh</td></tr>
+              <tr><td>Integrations</td><td>Isha</td><td>N/A</td><td>Anushil</td></tr>
+              <tr><td>Claims Creation</td><td>Prathyusha</td><td>N/A</td><td>Anushil</td></tr>
+              <tr><td>Product Platform</td><td>Isha</td><td>N/A</td><td>Isha</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <div class="section-label">Jira Updates</div>
+            <ul class="jira-list">
+              <li><span class="field-name">Status:</span>&nbsp;<span class="status-pill sp-disc">Discovery</span><span class="pending-tag">Not in Jira yet</span> <span class="arrow">to</span> <span class="status-pill sp-discDone">Discovery Done</span><span class="pending-tag">Not in Jira yet</span></li>
+              <li><span class="field-name">Assignee (customer ticket):</span>&nbsp;Product PM</li>
+              <li><span class="field-name">Create CPS ticket:</span>&nbsp;with full scope + acceptance criteria</li>
+              <li><span class="field-name">Link type:</span>&nbsp;<code>blocks</code> or <code>causes</code> (NOT relates to)</li>
+              <li><span class="field-name">CPS Assignee:</span>&nbsp;Pod Lead</li>
+            </ul>
+          </div>
+          <div>
+            <div class="section-label">Done When</div>
+            <div class="done-box">
+              <ul>
+                <li>CPS ticket exists with full scope</li>
+                <li>CPS linked to customer ticket (correct link type)</li>
+                <li>Pod Lead assigned on CPS</li>
+                <li>Customer ticket status = Discovery Done</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label">Rules</div>
+          <ul class="rules-list">
+            <li>Link type MUST be <code>blocks</code> or <code>causes</code>, never "relates to". Wrong link type = ticket reads as unscoped in all reporting.</li>
+            <li>Do NOT create CPS ticket until scope is fully defined. An empty CPS ticket is worse than no CPS ticket.</li>
+            <li>If same issue affects multiple customers → one CPS, multiple customer tickets linked to it. Don't create duplicate CPS tickets for the same root cause.</li>
+            <li>Tickets that don't require engineering will NEVER have a CPS ticket, that is correct and expected. Don't create one just to fill the field.</li>
+          </ul>
+        </div>
+
+
+        <details class="template-block">
+          <summary>📋 Subsequent Update &mdash; Reply to Customer <span class="tpl-timing">When category confirmed or engineering status changes</span><span class="tpl-owner-chip">CDT</span></summary>
+          <div class="template-body">
+            <div class="tpl-note">Post this whenever (a) issue category is confirmed or changes, or (b) the engineering ticket moves to a new status. Build the message by combining one row from each reference table below, then insert into the template body.</div>
+            <pre class="tpl-pre">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+Thank you for your patience. We wanted to update you on the progress of the ticket.
+
+<span class="ph-var">{{ENG_STATUS_MESSAGE}}</span>
+
+<span class="ph-var">{{CATEGORY_UPDATE_MESSAGE}}</span>
+
+The ticket is estimated to be resolved by <span class="ph">[DUE_DATE]</span>.
+
+Please let us know if you have any concerns or doubts. We would be happy to address them at the earliest.
+
+Thank you,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+            <button class="copy-btn" onclick="copyTpl(this)">Copy template</button>
+
+            <div class="upd-ref">
+              <div class="ph-label">{{ENG_STATUS_MESSAGE}} &mdash; pick by current engineering ticket status</div>
+              <table class="upd-table">
+                <tr><th>Engineering Ticket Status</th><th>Insert this message</th></tr>
+                <tr><td>To Do / In Progress / Code Review</td><td>The ticket has been escalated to our engineering team and is currently under development.</td></tr>
+                <tr><td>Ready for QA / QA Testing: Staging / For Regression Testing</td><td>The change is currently under validation.</td></tr>
+                <tr><td>Ready for Deployment</td><td>The change is ready to be deployed to production. Current estimated date of deployment: <span class="ph">[DUE_DATE]</span></td></tr>
+                <tr><td>On Hold / Blocked</td><td>The ticket has been escalated to our engineering team and is currently under investigation.</td></tr>
+              </table>
+            </div>
+
+            <div class="upd-ref" style="margin-top:10px;">
+              <div class="ph-label">{{CATEGORY_UPDATE_MESSAGE}} &mdash; pick by current issue category</div>
+              <table class="upd-table">
+                <tr><th>Issue Category</th><th>Insert this message</th></tr>
+                <tr><td>Bug</td><td>As per the current investigation, the team believes the issue is related to <span class="ph">[MODULE_NAME]</span>. We will update you once we have more updates on this ticket.</td></tr>
+                <tr><td>SOP Update</td><td>The team will be working on incorporating the change in the SOP. We will update you once the changes are deployed in production.</td></tr>
+                <tr><td>Enhancement</td><td>This is being considered as a feature enhancement. We will get back to you with more details and ETA on production.</td></tr>
+                <tr><td>Self Serve Task / Self Serve Bug</td><td>This seems to be a configuration change. The team would be able to make the change shortly, and test it. We will update you once the changes are in production.</td></tr>
+                <tr><td>Customer Query</td><td>The team is working on resolving your query. Please allow us some time to get back to you with a formal response.</td></tr>
+                <tr><td>Data Pull Issue</td><td>The current investigation shows that this issue may be related to claims/encounter data that was pulled for coding the charges. We will get back to you once the team has concluded the investigation.</td></tr>
+                <tr><td>Submission Issue</td><td>The current investigation shows that this issue may be related to the submission workflow. We will get back to you once the team has concluded the investigation.</td></tr>
+              </table>
+            </div>
+          </div>
+        </details>
+
+        <div class="next-stage-bar">
+          <span class="ns-label">Next &rarr;</span>
+          <div class="ns-route"><span class="ns-cond">Engineering required (Bug / Enhancement / SOP)</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 5 (Pod Lead Picks Up CPS)</span></div>
+          <div class="ns-route"><span class="ns-cond">No engineering needed</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 4 (Non-Eng Closure)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ STAGE 4 ══════════ -->
+    <div class="stage-card cdt" id="stage-4">
+      <div class="stage-header">
+        <div class="stage-meta">
+          <span class="stage-eyebrow">Stage 4</span>
+          <h2 class="stage-name">Non-Engineering Closure</h2>
+          <div class="stage-trigger-inline">Issue Category = Product tasks (self serve) / Self Serve Bug / CS tasks (self serve) / PII tasks / DevOps / IAT error (pure) · No engineering needed</div>
+        </div>
+        <div class="owner-chip cdt">Product / CDT / CS</div>
+        <div class="stage-ghost">4</div>
+      </div>
+      <div class="stage-body">
+
+        <div>
+          <div class="section-label">Routes by Category</div>
+          <div class="taxonomy-grid">
+            <div class="tax-item no-eng"><span class="tax-name">Product tasks (self serve)</span><span class="tax-desc">PFP updates, pathfinder, carve out, modifier toggles, NTE changes. Product PM configures on EPH → QA reviews → deploy to prod. Simple config may go direct to prod.</span></div>
+            <div class="tax-item no-eng"><span class="tax-name">Self Serve Bug</span><span class="tax-desc">Existing self-serve workflow not working. Product PM investigates and fixes on EPH → QA → prod. Do not send to engineering unless configuration layer is broken.</span></div>
+            <div class="tax-item no-eng"><span class="tax-name">CS tasks (self serve)</span><span class="tax-desc">Onboarding/offboarding, provider assist/autonomous, waiting-for-customer case actions. CS team owns and executes directly. No CPS ticket required.</span></div>
+            <div class="tax-item no-eng"><span class="tax-name">IAT error (pure)</span><span class="tax-desc">Route to Res Coding SPOCs: Athena → Kanak, Epic → Gayathri. Do NOT send to engineering. If IAT error compounds a pipeline error → send to engineering also.</span></div>
+            <div class="tax-item no-eng"><span class="tax-name">PII tasks</span><span class="tax-desc">EHR ingestion, validator issues, PII-sensitive data. Route to PII team: John / Andrew. They own resolution end-to-end.</span></div>
+            <div class="tax-item no-eng"><span class="tax-name">DevOps</span><span class="tax-desc">IP changes, Codex access, infra access. Route to DevOps: Ram / Ajay. CS to tag them directly in the ticket.</span></div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <div class="section-label">Jira Updates</div>
+            <ul class="jira-list">
+              <li><span class="field-name">Status:</span>&nbsp;<span class="arrow">to</span> <span class="status-pill sp-done">Done</span></li>
+              <li><span class="field-name">Assignee:</span>&nbsp;Relevant POC (see routes above)</li>
+              <li><span class="field-name">Reply to Customer:</span>&nbsp;Closure message (see below)</li>
+            </ul>
+          </div>
+          <div>
+            <div class="section-label">Done When</div>
+            <div class="done-box">
+              <ul>
+                <li>Customer notified via "Reply to Customer"</li>
+                <li>Status = Done</li>
+                <li>If Product tasks (self serve) or Self Serve Bug: EPH tested and prod deployed before closing</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label">Rules</div>
+          <ul class="rules-list">
+            <li>Product self-serve and Self Serve Bug changes must be tested on EPH before prod deployment, unless trivially safe (e.g. adding one practice ID)</li>
+            <li>When closing, always post via "Reply to Customer", explain what was done and why no engineering fix was needed. Never silently close a ticket.</li>
+            <li>Assist % complaints: Assist charts are the system working as designed. Use data to explain; do not open an engineering ticket unless the Assist % deviates from the agreed baseline.</li>
+          </ul>
+        </div>
+
+        <div class="next-stage-bar">
+          <span class="ns-label">Next &rarr;</span>
+          <div class="ns-route"><span class="ns-cond">Change applied or non-issue confirmed</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 11 (Customer Comms &amp; Closure)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ STAGE 5 ══════════ -->
+    <div class="stage-card eng" id="stage-5">
+      <div class="stage-header">
+        <div class="stage-meta">
+          <span class="stage-eyebrow">Stage 5</span>
+          <h2 class="stage-name">Engineering Pickup</h2>
+          <div class="stage-trigger-inline">CPS ticket created and linked · Customer ticket status = Discovery Done · Pod Lead picks it up</div>
+        </div>
+        <div class="owner-chip eng">Pod Lead → Developer</div>
+        <div class="stage-ghost">5</div>
+      </div>
+      <div class="stage-body">
+
+        <div class="subtix-block">
+          <div class="section-label">Engineering Sub-ticket Status Flow (CIPHER / CPS / CUR)</div>
+          <div class="subtix-flow-wrap">
+            <div class="subtix-flow">
+              <div class="subtix-status">
+                <span class="subtix-pill st-todo">To Do</span>
+                <span class="subtix-label">Developer picks<br>up ticket</span>
+              </div>
+              <div class="subtix-arrow-h">&rarr;</div>
+              <div class="subtix-status">
+                <span class="subtix-pill st-inprog">In Progress</span>
+                <span class="subtix-label">Active dev<br>work underway</span>
+              </div>
+              <div class="subtix-arrow-h">&rarr;</div>
+              <div class="subtix-status">
+                <span class="subtix-pill st-cr">Code Review</span>
+                <span class="subtix-label">PR raised, peer<br>review in progress</span>
+              </div>
+              <div class="subtix-arrow-h">&rarr;</div>
+              <div class="subtix-status">
+                <span class="subtix-pill st-readyqa">Ready for QA</span>
+                <span class="subtix-label">Code merged,<br>QA can start</span>
+              </div>
+              <div class="subtix-arrow-h">&rarr;</div>
+              <div class="subtix-status">
+                <span class="subtix-pill st-qastag">QA Testing:<br>Staging</span>
+                <span class="subtix-label">Testing on<br>staging env</span>
+              </div>
+              <div class="subtix-arrow-h">&rarr;</div>
+              <div class="subtix-status">
+                <span class="subtix-pill st-reg">For Regression<br>Testing</span>
+                <span class="subtix-label">Regression suite<br>running</span>
+              </div>
+              <div class="subtix-arrow-h">&rarr;</div>
+              <div class="subtix-status">
+                <span class="subtix-pill st-deploy">Ready for<br>Deployment</span>
+                <span class="subtix-label">CQA signed off,<br>cleared for prod</span>
+              </div>
+              <div class="subtix-arrow-h">&rarr;</div>
+              <div class="subtix-status">
+                <span class="subtix-pill st-done">Done</span>
+                <span class="subtix-label">Live in prod,<br>notify CDT</span>
+              </div>
+            </div>
+          </div>
+          <div class="subtix-side-states">
+            <div class="subtix-side-item">
+              <span class="subtix-pill st-blocked">Blocked</span>
+              <div class="subtix-side-desc"><strong>Use when:</strong> waiting on another team, an external system, or a dependency you cannot resolve. Must log the blocker reason and the dependency owner. Move back to In Progress when unblocked.</div>
+            </div>
+            <div class="subtix-side-item">
+              <span class="subtix-pill st-onhold">On Hold</span>
+              <div class="subtix-side-desc"><strong>Use when:</strong> ticket has been intentionally deprioritized by Pod Lead or PM. Not the same as Blocked. Requires an explicit decision from Pod Lead + reason logged. Return to To&nbsp;Do when re-activated.</div>
+            </div>
+            <div class="subtix-side-item">
+              <span class="subtix-pill st-reject">Rejected</span>
+              <div class="subtix-side-desc"><strong>Use when:</strong> ticket is found to be invalid, duplicate, or out of scope during triage or development. Log the reason. Customer ticket must also be updated by CDT &mdash; do not silently reject.</div>
+            </div>
+          </div>
+          <div class="subtix-note">Every status change on the sub-ticket is visible to CDT. Do not let a sub-ticket sit in one status for &gt; 2 business days without an Internal Note explaining why. Stale sub-tickets = stale customer ticket in CDT's view.</div>
+        </div>
+
+        <div>
+          <div class="section-label">Pod Lead Reference</div>
+          <table class="mini-table">
+            <thead><tr><th>Pod</th><th>Pod Lead</th><th>Engineering Team</th></tr></thead>
+            <tbody>
+              <tr><td>EnM</td><td>Praneeth</td><td>Praneeth, Kritagya, Osama (Engg); Srilakshmi, Jhenkar (Prompt)</td></tr>
+              <tr><td>ICD Coding <span style="font-size:10px;color:var(--text-muted)">(incl. Linking &amp; Sequencing)</span></td><td>Nishant</td><td>Nishant, Sourav (Engg); SJ; Sidharth (DL)</td></tr>
+              <tr><td>CPT</td><td>Abhishek Singh</td><td>Abhishek, Aiiyan (Engg); Jeffy (Prompt)</td></tr>
+              <tr><td>Integrations</td><td>Anushil</td><td>Integration team</td></tr>
+              <tr><td>Claims Creation</td><td>Anushil</td><td>Integration team</td></tr>
+              <tr><td>Product Platform</td><td>Isha</td><td>PM team</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <div class="section-label">Pod Lead Actions</div>
+          <ul class="actions-list">
+            <li><div class="action-num">1</div><span>Review the CPS ticket. Confirm scope is complete and acceptance criteria are clear before assigning to a developer</span></li>
+            <li><div class="action-num">2</div><span>Assign the CPS ticket to the right <strong>Developer</strong></span></li>
+            <li class="gap"><div class="action-num">3</div><span>Create <strong>engineering sub-tasks</strong> for each sub-team involved: Backend / Prompt / DL / Integrations / QA. Link all sub-tasks to the CPS ticket. <span class="gap-tag">Not followed today</span></span></li>
+            <li><div class="action-num">4</div><span>Agree on a realistic <strong>ETA</strong> that includes: dev time + CQA testing + regression + CDT validation + any dependencies on other teams</span></li>
+            <li class="gap"><div class="action-num">5</div><span>Set the <strong>Due Date</strong> field on the engineering ticket as the committed ETA. Update <strong>Story Points</strong> to reflect task complexity so effort is visible alongside the timeline. Communicate the ETA to the customer via <strong>"Reply to Customer"</strong> on the customer ticket. <span class="gap-tag">Not followed today</span></span></li>
+            <li class="gap"><div class="action-num">6</div><span>Move customer ticket status to <span class="status-pill sp-deliver">Picked for Delivery</span><span class="pending-tag">Not in Jira yet</span> <span class="gap-tag">Not followed today</span></span></li>
+            <li class="gap"><div class="action-num">7</div><span><strong>Developer:</strong> open the CIPHER / CUR sub-ticket immediately. Set <strong>Story Points</strong> (complexity estimate) and <strong>Due Date</strong> (= committed ETA agreed with Pod Lead). Move the sub-ticket from <span class="subtix-pill st-todo" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #94a3b8;">To Do</span> to <span class="subtix-pill st-inprog" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #93c5fd;">In Progress</span> the moment you start work. <span class="gap-tag">Not followed today</span></span></li>
+            <li class="gap"><div class="action-num">8</div><span><strong>Developer:</strong> all sub-ticket status changes must happen on the day the status actually changes &mdash; not retroactively at the end. Stale sub-ticket status = invisible progress for CDT and Pod Lead. <span class="gap-tag">Not followed today</span></span></li>
+          </ul>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <div class="section-label">Jira Updates</div>
+            <ul class="jira-list">
+              <li><span class="field-name">Status (customer ticket):</span>&nbsp;<span class="status-pill sp-discDone">Discovery Done</span><span class="pending-tag">Not in Jira yet</span> <span class="arrow">to</span> <span class="status-pill sp-deliver">Picked for Delivery</span><span class="pending-tag">Not in Jira yet</span></li>
+              <li><span class="field-name">Assignee:</span>&nbsp;Pod Lead (or engineering owner)</li>
+              <li><span class="field-name">Sub-tasks created:</span>&nbsp;Backend / Prompt / DL / Integrations / QA</li>
+              <li><span class="field-name">Due Date:</span>&nbsp;Set on engineering ticket (= committed ETA)</li>
+              <li><span class="field-name">Story Points:</span>&nbsp;Updated on engineering ticket to reflect complexity</li>
+              <li><span class="field-name">Reply to Customer:</span>&nbsp;ETA communicated</li>
+              <li><span class="field-name">Sub-ticket (CIPHER/CUR):</span>&nbsp;<span class="subtix-pill st-todo" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #94a3b8;">To Do</span> <span class="arrow">&rarr;</span> <span class="subtix-pill st-inprog" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #93c5fd;">In Progress</span> &nbsp;&bull;&nbsp;Story Points + Due Date set</li>
+            </ul>
+          </div>
+          <div>
+            <div class="section-label">Done When</div>
+            <div class="done-box">
+              <ul>
+                <li>Developer assigned and has started work</li>
+                <li>Sub-tasks created and linked</li>
+                <li>ETA documented and customer notified</li>
+                <li>Customer ticket = Picked for Delivery</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label">Rules</div>
+          <ul class="rules-list">
+            <li><strong>No patches, ever.</strong> Not for escalations. Not for P0s. Every fix must be properly scoped and implemented. A patch that bypasses this will not be stamped by Product.</li>
+            <li>Do NOT start work without a fully scoped CPS ticket. Missing acceptance criteria = guaranteed re-open.</li>
+            <li>Sub-tasks MUST be created and linked. Without them, nobody outside the pod can see actual progress, the customer ticket looks stuck.</li>
+            <li>ETA must be realistic. An ETA that slips once is a warning. An ETA that slips twice is a process failure.</li>
+          </ul>
+        </div>
+
+        <div class="next-stage-bar">
+          <span class="ns-label">Next &rarr;</span>
+          <div class="ns-route"><span class="ns-cond">Scope clear, dev starts CIPHER/CUR</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 7 (Testing &amp; Regression)</span></div>
+          <div class="ns-route"><span class="ns-cond">Scope gaps found in CPS</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 6 (Dev Clarity)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ STAGE 6 ══════════ -->
+    <div class="stage-card eng" id="stage-6">
+      <div class="stage-header">
+        <div class="stage-meta">
+          <span class="stage-eyebrow">Stage 6</span>
+          <h2 class="stage-name">Dev Clarity</h2>
+          <div class="stage-trigger-inline">Developer is unclear on scope after reviewing CPS ticket · Status unchanged</div>
+        </div>
+        <div class="owner-chip eng">Developer → Product PM</div>
+        <div class="stage-ghost">6</div>
+      </div>
+      <div class="stage-body">
+
+        <div class="two-col">
+          <div>
+            <div class="section-label">Developer Actions</div>
+            <ul class="actions-list">
+              <li><div class="action-num">1</div><span>Document the specific scope gaps clearly, not "I don't understand" but "I need to know: [specific question]"</span></li>
+              <li><div class="action-num">2</div><span>Reach out directly to the <strong>Product PM</strong> who scoped the CPS ticket</span></li>
+              <li class="gap"><div class="action-num">3</div><span>Add an <strong>Internal Note</strong> on the customer ticket: "Scope clarification needed, contacted PM [name] on [date]" <span class="gap-tag">Not followed today</span></span></li>
+              <li><div class="action-num">4</div><span>Do NOT start implementation with assumptions, wait for PM confirmation</span></li>
+            </ul>
+          </div>
+          <div>
+            <div class="section-label">CDT Actions (parallel)</div>
+            <ul class="actions-list">
+              <li><div class="action-num">1</div><span>Within 24 hours of developer raising the blocker, post via <strong>"Reply to Customer"</strong> acknowledging a delay and providing an updated ETA if available</span></li>
+              <li><div class="action-num">2</div><span>Status stays <span class="status-pill sp-deliver">Picked for Delivery</span><span class="pending-tag">Not in Jira yet</span>, do not change the customer-visible status</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <div class="section-label">Jira Updates</div>
+            <ul class="jira-list">
+              <li><span class="field-name">Status:</span>&nbsp;Unchanged, <span class="status-pill sp-deliver">Picked for Delivery</span><span class="pending-tag">Not in Jira yet</span></li>
+              <li><span class="field-name">Internal Note:</span>&nbsp;Scope gap documented, PM contacted, date logged</li>
+              <li><span class="field-name">Reply to Customer (CDT):</span>&nbsp;Delay acknowledged within 24hrs</li>
+              <li><span class="field-name">Sub-ticket (CIPHER/CUR):</span>&nbsp;<span class="subtix-pill st-inprog" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #93c5fd;">In Progress</span> <span class="arrow">&rarr;</span> <span class="subtix-pill st-blocked" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #fca5a5;">Blocked</span> &nbsp;&bull;&nbsp;Log blocker reason + PM name in Internal Note &bull; Move back to In Progress once PM responds</li>
+            </ul>
+          </div>
+          <div>
+            <div class="section-label">Done When</div>
+            <div class="done-box">
+              <ul>
+                <li>PM has provided written clarification (Internal Note or updated CPS)</li>
+                <li>Developer resumes work with confirmed scope</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label">Rules</div>
+          <ul class="rules-list">
+            <li>NEVER guess on scope and build. Incorrect implementation means a re-open, which resets the clock entirely.</li>
+            <li>CDT owns all customer communication, the developer does not post to the customer directly</li>
+            <li>Use Internal Note for dev-PM discussion. "Reply to Customer" is ONLY for the message that goes to the customer.</li>
+          </ul>
+        </div>
+
+        <div class="next-stage-bar">
+          <span class="ns-label">Next &rarr;</span>
+          <div class="ns-route"><span class="ns-cond">PM confirms scope &mdash; dev starts implementation</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 7 (Testing &amp; Regression)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ STAGE 7 ══════════ -->
+    <div class="stage-card eng" id="stage-7">
+      <div class="stage-header">
+        <div class="stage-meta">
+          <span class="stage-eyebrow">Stage 7</span>
+          <h2 class="stage-name">Regression Testing</h2>
+          <div class="stage-trigger-inline">Dev work complete · Regression suite triggered internally</div>
+        </div>
+        <div class="owner-chip eng">Developer + QA</div>
+        <div class="stage-ghost">7</div>
+      </div>
+      <div class="stage-body">
+
+        <div class="two-col">
+          <div>
+            <div class="section-label">Developer Actions</div>
+            <ul class="actions-list">
+              <li><div class="action-num">1</div><span>Complete the fix / implementation</span></li>
+              <li><div class="action-num">2</div><span>Trigger the regression testing suite</span></li>
+              <li><div class="action-num">3</div><span>Update the engineering sub-task status to In Testing</span></li>
+              <li class="gap"><div class="action-num">4</div><span>Add Internal Note on customer ticket: "Regression triggered on [date], expected completion [date]" <span class="gap-tag">Not followed today</span></span></li>
+            </ul>
+          </div>
+          <div>
+            <div class="section-label">QA Actions</div>
+            <ul class="actions-list">
+              <li><div class="action-num">1</div><span>Run the full regression suite</span></li>
+              <li><div class="action-num">2</div><span>Document results in the engineering sub-task</span></li>
+              <li><div class="action-num">3</div><span><strong>Pass:</strong> notify CQA team, hand off to Stage 8</span></li>
+              <li><div class="action-num">4</div><span><strong>Fail:</strong> return to developer with specific failure details. Notify Pod Lead. Restart Stage 7.</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <div class="section-label">Jira Updates</div>
+            <ul class="jira-list">
+              <li><span class="field-name">Sub-ticket — when code is written, raise PR:</span>&nbsp;<span class="subtix-pill st-inprog" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #93c5fd;">In Progress</span> <span class="arrow">&rarr;</span> <span class="subtix-pill st-cr" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #c4b5fd;">Code Review</span></li>
+              <li><span class="field-name">Sub-ticket — when PR approved and merged:</span>&nbsp;<span class="subtix-pill st-cr" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #c4b5fd;">Code Review</span> <span class="arrow">&rarr;</span> <span class="subtix-pill st-readyqa" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #fde047;">Ready for QA</span></li>
+              <li><span class="field-name">Sub-ticket — when QA picks it up on staging:</span>&nbsp;<span class="subtix-pill st-readyqa" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #fde047;">Ready for QA</span> <span class="arrow">&rarr;</span> <span class="subtix-pill st-qastag" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #fbbf24;">QA Testing: Staging</span></li>
+              <li><span class="field-name">Sub-ticket — when regression triggered:</span>&nbsp;<span class="subtix-pill st-qastag" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #fbbf24;">QA Testing: Staging</span> <span class="arrow">&rarr;</span> <span class="subtix-pill st-reg" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #fb923c;">For Regression Testing</span></li>
+              <li><span class="field-name">Sub-ticket — if QA or regression fails:</span>&nbsp;Any stage <span class="arrow">&rarr;</span> <span class="subtix-pill st-inprog" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #93c5fd;">In Progress</span> &nbsp;&bull;&nbsp;Re-assign to developer + log failure details in Internal Note</li>
+              <li><span class="field-name">Customer ticket status:</span>&nbsp;Unchanged, <span class="status-pill sp-deliver">Picked for Delivery</span><span class="pending-tag">Not in Jira yet</span></li>
+              <li><span class="field-name">Internal Note:</span>&nbsp;Regression triggered, expected completion date</li>
+            </ul>
+          </div>
+          <div>
+            <div class="section-label">Done When</div>
+            <div class="done-box">
+              <ul>
+                <li>Regression suite has passed</li>
+                <li>CQA team notified for manual validation</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label">Rules</div>
+          <ul class="rules-list">
+            <li>Customer-facing ticket status does NOT change during regression, do not update the customer ticket to confuse them</li>
+            <li>Do NOT skip regression even for "trivial" fixes. Trivial fixes have caused production regressions before.</li>
+            <li>If regression fails, notify Pod Lead immediately, do not restart silently without visibility</li>
+          </ul>
+        </div>
+
+        <div class="next-stage-bar">
+          <span class="ns-label">Next &rarr;</span>
+          <div class="ns-route"><span class="ns-cond">Regression passes</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 8 (CQA Validation)</span></div>
+          <div class="ns-route"><span class="ns-cond">Regression fails</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Back to developer (restart Stage 7)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ STAGE 8 ══════════ -->
+    <div class="stage-card cqa" id="stage-8">
+      <div class="stage-header">
+        <div class="stage-meta">
+          <span class="stage-eyebrow">Stage 8</span>
+          <h2 class="stage-name">CQA Validation</h2>
+          <div class="stage-trigger-inline">Regression passed · CQA team notified for manual clinical validation</div>
+        </div>
+        <div class="owner-chip cqa">CQA</div>
+        <div class="stage-ghost">8</div>
+      </div>
+      <div class="stage-body">
+
+        <div>
+          <div class="section-label">CQA POC by Pod <span style="font-weight:400;font-size:10px;color:var(--text-muted);text-transform:none;letter-spacing:0">(full roster pending, use Prema as POC for all pods until updated)</span></div>
+          <table class="mini-table">
+            <thead><tr><th>Pod</th><th>Pod Lead</th><th>CQA POC</th></tr></thead>
+            <tbody>
+              <tr><td>EnM</td><td>Praneeth</td><td>Prema</td></tr>
+              <tr><td>ICD Coding <span style="font-size:10px;color:var(--text-muted)">(incl. Linking &amp; Sequencing)</span></td><td>Nishant</td><td>Prema</td></tr>
+              <tr><td>CPT</td><td>Abhishek Singh</td><td>Prema</td></tr>
+              <tr><td>Integrations</td><td>Anushil</td><td>Prema</td></tr>
+              <tr><td>Claims Creation</td><td>Anushil</td><td>Prema</td></tr>
+              <tr><td>Product Platform</td><td>Isha</td><td>Prema</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <div class="section-label">CQA Actions</div>
+          <ul class="actions-list">
+            <li><div class="action-num">1</div><span>Review the regression output and the acceptance criteria in the CPS ticket</span></li>
+            <li><div class="action-num">2</div><span>Run <strong>manual validation</strong> on the specific charts/encounters listed in the original customer ticket</span></li>
+            <li><div class="action-num">3</div><span>Validate that the fix matches the acceptance criteria, not general judgment, criteria from the CPS ticket</span></li>
+            <li><div class="action-num">4</div><span><strong>Pass:</strong> post written sign-off in Internal Note on the engineering ticket → hand off to Stage 9</span></li>
+            <li><div class="action-num">5</div><span><strong>Fail:</strong> post specific failure details in Internal Note. Re-assign engineering sub-task to developer. Restart from Stage 7.</span></li>
+          </ul>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <div class="section-label">Jira Updates</div>
+            <ul class="jira-list">
+              <li><span class="field-name">Customer ticket status:</span>&nbsp;Unchanged, <span class="status-pill sp-deliver">Picked for Delivery</span><span class="pending-tag">Not in Jira yet</span></li>
+              <li><span class="field-name">Engineering ticket (on pass):</span>&nbsp;Internal Note with written CQA sign-off</li>
+              <li><span class="field-name">Engineering sub-task (on fail):</span>&nbsp;Re-assign to developer + failure details</li>
+              <li><span class="field-name">Sub-ticket (CIPHER/CUR) on CQA pass:</span>&nbsp;<span class="subtix-pill st-reg" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #fb923c;">For Regression Testing</span> <span class="arrow">&rarr;</span> <span class="subtix-pill st-deploy" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #86efac;">Ready for Deployment</span></li>
+              <li><span class="field-name">Sub-ticket (CIPHER/CUR) on CQA fail:</span>&nbsp;<span class="subtix-pill st-reg" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #fb923c;">For Regression Testing</span> <span class="arrow">&rarr;</span> <span class="subtix-pill st-inprog" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #93c5fd;">In Progress</span> &nbsp;&bull;&nbsp;Re-assign to developer</li>
+            </ul>
+          </div>
+          <div>
+            <div class="section-label">Done When</div>
+            <div class="done-box">
+              <ul>
+                <li>CQA sign-off posted in writing on engineering ticket</li>
+                <li>Developer notified to proceed with deployment</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label">Rules</div>
+          <ul class="rules-list">
+            <li>CQA sign-off MUST be in writing in the ticket, verbal OK does not count. A written record is required for audit trail.</li>
+            <li>Do NOT deploy without CQA sign-off. No exceptions.</li>
+            <li>Validate against CPS acceptance criteria, not your personal judgment of whether the output "looks right"</li>
+          </ul>
+        </div>
+
+        <div class="next-stage-bar">
+          <span class="ns-label">Next &rarr;</span>
+          <div class="ns-route"><span class="ns-cond">CQA sign-off given</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 9 (Deployment)</span></div>
+          <div class="ns-route"><span class="ns-cond">CQA fails</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Back to developer (restart from Stage 7)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ STAGE 9 ══════════ -->
+    <div class="stage-card eng" id="stage-9">
+      <div class="stage-header">
+        <div class="stage-meta">
+          <span class="stage-eyebrow">Stage 9</span>
+          <h2 class="stage-name">Deployment</h2>
+          <div class="stage-trigger-inline">CQA sign-off received · Developer deploys to production</div>
+        </div>
+        <div class="owner-chip eng">Developer</div>
+        <div class="stage-ghost">9</div>
+      </div>
+      <div class="stage-body">
+
+        <div>
+          <div class="section-label">Actions</div>
+          <ul class="actions-list">
+            <li><div class="action-num">1</div><span>Deploy the fix to production</span></li>
+            <li><div class="action-num">2</div><span>Confirm deployment success, do not notify CDT preemptively</span></li>
+            <li class="gap"><div class="action-num">3</div><span>Re-assign customer ticket to CDT reviewer <span class="gap-tag">Not followed today</span></span></li>
+          </ul>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <div class="section-label">Jira Updates</div>
+            <ul class="jira-list">
+              <li><span class="field-name">Sub-ticket (CIPHER/CUR) — deploy to prod:</span>&nbsp;<span class="subtix-pill st-deploy" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #86efac;">Ready for Deployment</span> <span class="arrow">&rarr;</span> <span class="subtix-pill st-done" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #14532d;">Done</span> &nbsp;&bull;&nbsp;Post closure comment (Root Cause / Fix / Impacted Claims / Action Required / Preventative Measures)</li>
+              <li><span class="field-name">Status (customer ticket):</span>&nbsp;<span class="status-pill sp-deliver">Picked for Delivery</span><span class="pending-tag">Not in Jira yet</span>, unchanged (add Internal Note marking deployment)</li>
+              <li><span class="field-name">Assignee:</span>&nbsp;<span class="arrow">to</span> CDT reviewer</li>
+            </ul>
+          </div>
+          <div>
+            <div class="section-label">Done When</div>
+            <div class="done-box">
+              <ul>
+                <li>Code is live in production</li>
+                <li>CDT reviewer assigned and notified</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label">Rules</div>
+          <ul class="rules-list">
+            <li>Confirm deployment success before handing off. If deployment fails midway, notify Pod Lead immediately.</li>
+          </ul>
+        </div>
+
+
+        <details class="template-block">
+          <summary>📋 Engineering Ticket Closure Comment &mdash; Required before closing <span class="tpl-timing">Last comment before closing the engineering ticket</span><span class="tpl-owner-chip">Engineering / PM</span></summary>
+          <div class="template-body">
+            <div class="tpl-note">This comment must be the <strong>last comment</strong> before closing any engineering ticket linked to a customer ticket. CDT reads this comment to draft the customer-facing closure message. Incomplete fields = CDT cannot close the customer ticket.</div>
+            <div class="engg-fields">
+              <div class="engg-field">
+                <div class="engg-field-label">Root Cause</div>
+                <div class="engg-field-hint">Provide a detailed technical RCA. Include timelines, which module failed, and exactly what went wrong in the pipeline logic.</div>
+              </div>
+              <div class="engg-field">
+                <div class="engg-field-label">Resolution / Fix Provided</div>
+                <div class="engg-field-hint">Describe the exact fix applied &mdash; what was changed in the code, config, prompt, or pipeline logic.</div>
+              </div>
+              <div class="engg-field">
+                <div class="engg-field-label">Impacted Claims / Encounters</div>
+                <div class="engg-field-hint">List the actual CSNs impacted, or provide the logic / filter for the customer to identify affected charts themselves.</div>
+              </div>
+              <div class="engg-field">
+                <div class="engg-field-label">Action Required by Customer (if any)</div>
+                <div class="engg-field-hint">List any action the customer must take &mdash; e.g., clean up WQ items, reprocess specific encounters, confirm fix in their system. Leave blank if none.</div>
+              </div>
+              <div class="engg-field">
+                <div class="engg-field-label">Preventative Measures (if any)</div>
+                <div class="engg-field-hint">Describe any monitoring alert, regression test, or process change put in place to prevent recurrence. Leave blank if none.</div>
+              </div>
+            </div>
+            <pre class="tpl-pre" style="margin-top:12px;">Root Cause: <span class="ph">[Provide a detailed technical RCA. Include timelines, modules impacted, and what specifically failed.]</span>
+
+Resolution/Fix Provided: <span class="ph">[Describe the exact fix applied.]</span>
+
+Impacted Claims/Encounters: <span class="ph">[List actual CSNs impacted, or logic for customer to identify affected charts.]</span>
+
+Action Required by Customer (if any): <span class="ph">[List any action customer needs to perform. Leave blank if none.]</span>
+
+Preventative Measures (if any): <span class="ph">[Describe any monitoring or process change to prevent recurrence. Leave blank if none.]</span></pre>
+            <button class="copy-btn" onclick="copyTpl(this)">Copy template</button>
+          </div>
+        </details>
+
+        <div class="next-stage-bar">
+          <span class="ns-label">Next &rarr;</span>
+          <div class="ns-route"><span class="ns-cond">Deployed to production</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 10 (CDT Production Validation)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ STAGE 10 ══════════ -->
+    <div class="stage-card cdt" id="stage-10">
+      <div class="stage-header">
+        <div class="stage-meta">
+          <span class="stage-eyebrow">Stage 10</span>
+          <h2 class="stage-name">CDT Production Validation</h2>
+          <div class="stage-trigger-inline">All engineering tickets and sub-tasks on the customer ticket are closed · CDT informed to validate in production</div>
+        </div>
+        <div class="owner-chip cdt">CDT</div>
+        <div class="stage-ghost">10</div>
+      </div>
+      <div class="stage-body">
+
+        <div>
+          <div class="section-label">Actions</div>
+          <ul class="actions-list">
+            <li><div class="action-num">1</div><span>Test the fix in production using the <strong>exact same charts/encounters</strong> from the original customer ticket, not random samples</span></li>
+            <li><div class="action-num">2</div><span>Verify the output matches the expected behavior defined in the CPS acceptance criteria</span></li>
+            <li><div class="action-num">3</div><span><strong>Pass:</strong> proceed to Stage 11 (customer communication)</span></li>
+            <li><div class="action-num">4</div><span><strong>Unexpected issue found:</strong> add Internal Note with specific details. Re-assign to Pod Lead. Notify customer via "Reply to Customer" before they notice. Loop back to Stage 5/7.</span></li>
+          </ul>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <div class="section-label">Jira Updates</div>
+            <ul class="jira-list">
+              <li><span class="field-name">Assignee:</span>&nbsp;CDT reviewer</li>
+              <li><span class="field-name">Status (on pass):</span>&nbsp;<span class="arrow">to</span> <span class="status-pill sp-done">Done</span> (set in Stage 11)</li>
+              <li><span class="field-name">Status (on fail):</span>&nbsp;Stay at <span class="status-pill sp-deliver">Picked for Delivery</span><span class="pending-tag">Not in Jira yet</span>; re-assign to Pod Lead</li>
+              <li><span class="field-name">Internal Note:</span>&nbsp;Validation outcome documented</li>
+            </ul>
+          </div>
+          <div>
+            <div class="section-label">Done When</div>
+            <div class="done-box">
+              <ul>
+                <li>CDT confirms fix works in production</li>
+                <li>Validation outcome logged in Internal Note</li>
+                <li>Ready to communicate to customer (Stage 11)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label">Rules</div>
+          <ul class="rules-list">
+            <li>Engineering sign-off alone is NOT enough. CDT must confirm in production. Engineering validation = internal; CDT validation = customer-ready.</li>
+            <li>If an unexpected issue is found, notify the customer BEFORE they notice it themselves. Proactive communication > reactive damage control.</li>
+            <li>Validate using the EXACT charts from the original ticket, not a random sample</li>
+          </ul>
+        </div>
+
+        <div class="next-stage-bar">
+          <span class="ns-label">Next &rarr;</span>
+          <div class="ns-route"><span class="ns-cond">Validation passes</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 11 (Customer Comms &amp; Closure)</span></div>
+          <div class="ns-route"><span class="ns-cond">Unexpected issue found</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Notify customer proactively &rarr; loop back to Stage 5</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ STAGE 11 ══════════ -->
+    <div class="stage-card cdt" id="stage-11">
+      <div class="stage-header">
+        <div class="stage-meta">
+          <span class="stage-eyebrow">Stage 11</span>
+          <h2 class="stage-name">Customer Communication &amp; Closure</h2>
+          <div class="stage-trigger-inline">CDT prod validation passed · Ready to close</div>
+        </div>
+        <div class="owner-chip cdt">CDT</div>
+        <div class="stage-ghost">11</div>
+      </div>
+      <div class="stage-body">
+
+        <div>
+          <div class="section-label">Actions</div>
+          <ul class="actions-list">
+            <li><div class="action-num">1</div><span>Draft the closure message, use the standard template (owned by <strong>Jasmeet Singh</strong>)</span></li>
+            <li class="gap"><div class="action-num">2</div><span>Tag <strong>Jasmeet Singh</strong> to review before sending, consistency of tone and format across all tickets <span class="gap-tag">Not followed today</span></span></li>
+            <li><div class="action-num">3</div><span>Post the message via <strong>"Reply to Customer"</strong> (customer-visible), NEVER via Internal Note</span></li>
+            <li><div class="action-num">4</div><span>Set ticket status to <span class="status-pill sp-done">Done</span></span></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="section-label">Closure Message, Required Elements</div>
+          <div class="done-box">
+            <ul>
+              <li><strong>What was fixed</strong>, non-technical summary of the issue and the fix</li>
+              <li><strong>When it was deployed</strong>, the exact deployment date</li>
+              <li><strong>Why this won't recur</strong>, brief explanation of the root cause and what prevents recurrence</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <div class="section-label">Jira Updates</div>
+            <ul class="jira-list">
+              <li><span class="field-name">Status:</span>&nbsp;<span class="arrow">to</span> <span class="status-pill sp-done">Done</span></li>
+              <li><span class="field-name">Reply to Customer:</span>&nbsp;Closure message (all 3 required elements)</li>
+            </ul>
+          </div>
+          <div>
+            <div class="section-label">Done When</div>
+            <div class="done-box">
+              <ul>
+                <li>Customer-facing message posted via "Reply to Customer"</li>
+                <li>Customer ticket status = Done</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label">Rules</div>
+          <ul class="rules-list">
+            <li class="gap">ALWAYS use "Reply to Customer" for the closure message, not Internal Note. Closing silently (without a message) causes customers to assume nothing happened. <span class="gap-tag">Not followed today</span></li>
+            <li>Never close without all 3 elements: what / when / why it won't recur. Incomplete messages are the #1 cause of re-opens.</li>
+            <li>Tag Jasmeet before every send. One voice, one format, consistent experience for the customer.</li>
+          </ul>
+        </div>
+
+
+        <details class="template-block">
+          <summary>📋 Resolution Templates &mdash; Reply to Customer <span class="tpl-timing">Select by Issue Category</span><span class="tpl-owner-chip">CDT</span></summary>
+          <div class="template-body">
+            <div class="tpl-note">Select the tab matching the ticket&#39;s Issue Category. Fill <strong>[MODULE_NAME]</strong> from the Index sheet in <em>CDT_Communication_Templates_v2.xlsx</em>. All [BRACKETED] fields must be replaced before posting.</div>
+            <div class="res-tabs">
+              <button class="res-tab active" data-panel="res-bug" onclick="switchResTab(this)">Bug</button>
+              <button class="res-tab" data-panel="res-sop" onclick="switchResTab(this)">SOP Update</button>
+              <button class="res-tab" data-panel="res-enh" onclick="switchResTab(this)">Enhancement</button>
+              <button class="res-tab" data-panel="res-ss" onclick="switchResTab(this)">Self Serve</button>
+              <button class="res-tab" data-panel="res-iat" onclick="switchResTab(this)">IAT Error</button>
+              <button class="res-tab" data-panel="res-cq" onclick="switchResTab(this)">Customer Query</button>
+              <button class="res-tab" data-panel="res-ni" onclick="switchResTab(this)">Non-Issue</button>
+              <button class="res-tab" data-panel="res-rep" onclick="switchResTab(this)">Reporting</button>
+              <button class="res-tab" data-panel="res-cn" onclick="switchResTab(this)">Clarity Needed</button>
+            </div>
+
+            <!-- BUG -->
+            <div id="res-bug" class="res-panel active">
+              <div class="res-when">Use when a pipeline defect has been confirmed, root-caused, and the fix is live. Select [MODULE_NAME] from the Index sheet.</div>
+              <pre class="tpl-pre">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+Thank you for flagging this. We have investigated the issue and confirmed a defect in our <span class="ph">[MODULE_NAME]</span>. The fix has now been deployed.
+
+<strong>Root cause:</strong>
+<span class="ph">[ROOT_CAUSE]</span>
+
+<strong>Fix applied:</strong>
+<span class="ph">[FIX_DESCRIPTION]</span>
+
+<strong>Effective date:</strong>
+<span class="ph">[DATE]</span> &mdash; encounters processed from this date onward will reflect the corrected behavior.
+
+<span class="tpl-opt">[Optional &mdash; if preventive measures deployed:
+&ldquo;A monitoring alert has been configured to detect if claims matching this pattern are processed without the expected fix.&rdquo;]</span>
+
+<span class="tpl-opt">[Optional &mdash; if customer action needed:
+&ldquo;If you have specific claims processed before [DATE] that were affected, please share the CSN(s) and we will review and reprocess them.&rdquo;]</span>
+
+Please verify on your next batch of claims. If you see any further discrepancies, share the CSN(s) and we will investigate promptly.
+
+This ticket will now be closed.
+
+Thank you,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+              <div class="tpl-ph-guide">
+                <div class="ph-label">Placeholders</div>
+                <ul>
+                  <li><code>[MODULE_NAME]</code> &rarr; from Index sheet (e.g. &ldquo;E&amp;M Prediction Module&rdquo;)</li>
+                  <li><code>[ROOT_CAUSE]</code> &rarr; from engineering ticket closure comment</li>
+                  <li><code>[FIX_DESCRIPTION]</code> &rarr; from engineering ticket closure comment</li>
+                  <li><code>[DATE]</code> &rarr; deployment date</li>
+                  <li><code>[CDT_REP_NAME]</code> / <code>[CUSTOMER_NAME]</code> &rarr; replace before posting</li>
+                </ul>
+              </div>
+              <button class="copy-btn" onclick="copyTpl(this)">Copy template</button>
+            </div>
+
+            <!-- SOP UPDATE -->
+            <div id="res-sop" class="res-panel">
+              <div class="res-when">Use when a customer-specific SOP/configuration change has been completed and deployed.</div>
+              <pre class="tpl-pre">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+Thank you for raising this. We have completed the requested update to our <span class="ph">[MODULE_NAME]</span>.
+
+<strong>What was updated:</strong>
+<span class="ph">[CHANGE_DESCRIPTION]</span>
+
+<strong>Effective date:</strong>
+<span class="ph">[DATE]</span> &mdash; encounters processed from this date onward will follow the updated configuration.
+
+<span class="tpl-opt">[Optional &mdash; if retroactive reprocessing may be needed:
+&ldquo;If any encounters dated before [DATE] need to be reprocessed under the updated rule, please share the CSN(s) and we will action them.&rdquo;]</span>
+
+Please review the output on your next batch of claims and confirm the change is working as expected. If anything doesn&#39;t look right, share the relevant CSN(s) and we will investigate promptly.
+
+This ticket will now be closed.
+
+Thank you,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+              <div class="tpl-ph-guide">
+                <div class="ph-label">Placeholders</div>
+                <ul>
+                  <li><code>[MODULE_NAME]</code> &rarr; from Index sheet</li>
+                  <li><code>[CHANGE_DESCRIPTION]</code> &rarr; fill from Jira ticket notes or RCA Samples in the Excel</li>
+                  <li><code>[DATE]</code> &rarr; effective deployment date</li>
+                  <li><code>[CDT_REP_NAME]</code> / <code>[CUSTOMER_NAME]</code> &rarr; replace before posting</li>
+                </ul>
+              </div>
+              <button class="copy-btn" onclick="copyTpl(this)">Copy template</button>
+            </div>
+
+            <!-- ENHANCEMENT -->
+            <div id="res-enh" class="res-panel">
+              <div class="res-when">Use when a net-new capability, coverage rule, or coding-guideline update has been added to the pipeline and is now live.</div>
+              <pre class="tpl-pre">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+We are pleased to confirm that the following enhancement has been deployed to your <span class="ph">[MODULE_NAME]</span>.
+
+<strong>What was added:</strong>
+<span class="ph">[ENHANCEMENT_DESCRIPTION]</span>
+
+<strong>Why this change was made:</strong>
+<span class="ph">[RULE_BASIS]</span> &mdash; e.g. &ldquo;This reflects updated CMS guidelines effective [DATE]&rdquo; / &ldquo;This aligns with [PAYER] coverage rule for [CODE_CATEGORY].&rdquo;
+
+<strong>Effective date:</strong>
+<span class="ph">[DATE]</span> &mdash; new encounters processed from this date onward will include this capability.
+
+Please review the updated output on upcoming claims and let us know if you have any questions.
+
+This ticket will now be closed.
+
+Thank you,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+              <div class="tpl-ph-guide">
+                <div class="ph-label">Placeholders</div>
+                <ul>
+                  <li><code>[MODULE_NAME]</code> &rarr; from Index sheet</li>
+                  <li><code>[ENHANCEMENT_DESCRIPTION]</code> &rarr; describe the new capability</li>
+                  <li><code>[RULE_BASIS]</code> &rarr; cite the guideline, CMS update, or payer rule driving this change</li>
+                  <li><code>[DATE]</code> &rarr; effective deployment date</li>
+                  <li><code>[CDT_REP_NAME]</code> / <code>[CUSTOMER_NAME]</code> &rarr; replace before posting</li>
+                </ul>
+              </div>
+              <button class="copy-btn" onclick="copyTpl(this)">Copy template</button>
+            </div>
+
+            <!-- SELF SERVE -->
+            <div id="res-ss" class="res-panel">
+              <div class="res-when">Use when the change was applied via the Arintra self-serve configuration platform (not a code deploy). Use Variant 1 for planned changes, Variant 2 for misconfiguration found and corrected.</div>
+              <div class="res-variant-sep">Variant 1 &mdash; Self Serve Task (planned configuration change)</div>
+              <pre class="tpl-pre">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+The configuration change you requested for <span class="ph">[MODULE_NAME]</span> has been applied via our configuration manager.
+
+<strong>Change applied:</strong>
+<span class="ph">[CHANGE_DESCRIPTION]</span>
+
+<strong>Effective date:</strong>
+<span class="ph">[DATE]</span> &mdash; encounters processed from this date onward will reflect the updated configuration.
+
+Please verify the change on your end and let us know if any further adjustments are needed.
+
+This ticket will now be closed.
+
+Thank you,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+              <button class="copy-btn" onclick="copyTpl(this)">Copy Variant 1</button>
+              <div class="res-variant-sep">Variant 2 &mdash; Self Serve Bug (misconfiguration found and corrected)</div>
+              <pre class="tpl-pre">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+Thank you for flagging this. We investigated the issue and identified a configuration setting in your <span class="ph">[MODULE_NAME]</span> that was not aligned with the expected behavior.
+
+<strong>Root cause:</strong>
+<span class="ph">[CHANGE_DESCRIPTION &mdash; describe the misconfiguration found]</span>
+
+<strong>Fix applied:</strong>
+The configuration has been corrected via our self-serve platform.
+
+<strong>Effective date:</strong>
+<span class="ph">[DATE]</span> &mdash; encounters processed from this date onward will reflect the corrected configuration.
+
+<span class="tpl-opt">[Optional &mdash; if retroactive correction needed:
+&ldquo;If any encounters processed before [DATE] were affected, please share the CSN(s) and we will review them.&rdquo;]</span>
+
+Please verify on your next batch of claims and let us know if you see any further discrepancies.
+
+This ticket will now be closed.
+
+Thank you,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+              <button class="copy-btn" onclick="copyTpl(this)">Copy Variant 2</button>
+            </div>
+
+            <!-- IAT ERROR -->
+            <div id="res-iat" class="res-panel">
+              <div class="res-when">Use when the pipeline was correct but an error was introduced during the manual coding review stage. <strong>Do NOT name the IAT team explicitly</strong> &mdash; use &ldquo;our coding team&rdquo; or &ldquo;during the manual review stage.&rdquo;</div>
+              <pre class="tpl-pre">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+Thank you for flagging this. We have reviewed the case in detail.
+
+Upon review, we found that the <span class="ph">[BRIEF_DESCRIPTION]</span> for this encounter did not reflect the most accurate determination for this clinical scenario.
+
+We have corrected the affected encounter(s) and have reviewed our quality guidelines for <span class="ph">[MODULE_NAME]</span> cases of this type to ensure consistent handling going forward.
+
+<span class="tpl-opt">[If claims were retriggered: &ldquo;The corrected claim(s) have been reprocessed as of [DATE].&rdquo;]</span>
+
+Please let us know if you observe any similar cases and we will investigate promptly.
+
+This ticket will now be closed.
+
+Thank you for your patience,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+              <div class="tpl-ph-guide">
+                <div class="ph-label">Placeholders</div>
+                <ul>
+                  <li><code>[BRIEF_DESCRIPTION]</code> &rarr; e.g. &ldquo;E&amp;M level assigned&rdquo; / &ldquo;procedure CPT applied&rdquo; / &ldquo;modifier selection&rdquo;</li>
+                  <li><code>[MODULE_NAME]</code> &rarr; from Index sheet</li>
+                  <li><code>[DATE]</code> &rarr; date claims were reprocessed (if applicable)</li>
+                  <li><code>[CDT_REP_NAME]</code> / <code>[CUSTOMER_NAME]</code> &rarr; replace before posting</li>
+                </ul>
+              </div>
+              <button class="copy-btn" onclick="copyTpl(this)">Copy template</button>
+            </div>
+
+            <!-- CUSTOMER QUERY -->
+            <div id="res-cq" class="res-panel">
+              <div class="res-when">Use when the customer is questioning an output, investigation confirms the pipeline is correct, and an explanation closes the ticket. If customer wants the behavior changed, use Variant 2 to open an SOP Update ticket.</div>
+              <div class="res-variant-sep">Variant 1 &mdash; Pipeline output is correct; explanation closes the ticket</div>
+              <pre class="tpl-pre">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+Thank you for your question. We have reviewed the encounter(s) in question and can confirm that the output from our <span class="ph">[MODULE_NAME]</span> is correct per the current coding guidelines and your agreed SOP.
+
+<strong>Why Arintra produced this output:</strong>
+<span class="ph">[EXPLANATION]</span>
+
+If you would like this behavior changed for your practice, please let us know and we can review whether a configuration update is appropriate &mdash; this would be logged as a separate SOP Update ticket.
+
+This ticket will now be closed.
+
+Thank you,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+              <button class="copy-btn" onclick="copyTpl(this)">Copy Variant 1</button>
+              <div class="res-variant-sep">Variant 2 &mdash; Customer requests behavior change; escalate as SOP Update</div>
+              <pre class="tpl-pre">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+Thank you for clarifying. The current output from our <span class="ph">[MODULE_NAME]</span> is consistent with the agreed SOP, but we understand you would like this behavior updated for your practice.
+
+<strong>Requested change:</strong>
+<span class="ph">[DESCRIPTION_OF_REQUESTED_CHANGE]</span>
+
+We will log this as a <span class="ph">[SOP Update / Enhancement]</span> ticket and our team will review the feasibility. You will receive an update once it has been assessed and scheduled.
+
+This ticket will now be closed. A new ticket has been created: <span class="ph">[NEW_TICKET_ID]</span>.
+
+Thank you,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+              <button class="copy-btn" onclick="copyTpl(this)">Copy Variant 2</button>
+            </div>
+
+            <!-- NON-ISSUE -->
+            <div id="res-ni" class="res-panel">
+              <div class="res-when">Use when investigation confirms the pipeline is working as designed and no fix is needed (Variant 1), or when the ticket is a meta-ticket, duplicate, or internal tracker with no standalone issue (Variant 2).</div>
+              <div class="res-variant-sep">Variant 1 &mdash; Investigation complete; pipeline working as designed</div>
+              <pre class="tpl-pre">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+Thank you for raising this. We have completed our investigation and can confirm that the output from our <span class="ph">[MODULE_NAME]</span> is working as designed for these encounters.
+
+<strong>Our finding:</strong>
+<span class="ph">[FINDING]</span> &mdash; e.g. &ldquo;The coding aligns with your agreed SOP for [ENCOUNTER_TYPE].&rdquo;
+
+No changes to the pipeline or configuration are required at this time. If you believe a rule change is needed, please let us know and we can explore a SOP Update or Enhancement.
+
+This ticket will now be closed.
+
+Thank you,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+              <button class="copy-btn" onclick="copyTpl(this)">Copy Variant 1</button>
+              <div class="res-variant-sep">Variant 2 &mdash; Meta-ticket, duplicate, or internal tracker</div>
+              <pre class="tpl-pre">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+<span class="ph">[CONTEXT &mdash; choose one:
+Option A (priority list): &ldquo;Thank you for sharing your priority list. The items have been reviewed and individual tickets have been raised or updated accordingly.&rdquo;
+Option B (duplicate): &ldquo;This ticket captures the same issue as [ORIGINAL_TICKET_ID], which is being tracked and actioned there.&rdquo;
+Option C (no distinct issue): &ldquo;This ticket does not describe a standalone issue. The related work is being tracked under [LINKED_TICKET_ID].&rdquo;]</span>
+
+We will close this ticket to keep our backlog clean. Please continue to track progress on <span class="ph">[LINKED_TICKET_ID]</span>.
+
+Thank you,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+              <button class="copy-btn" onclick="copyTpl(this)">Copy Variant 2</button>
+            </div>
+
+            <!-- REPORTING -->
+            <div id="res-rep" class="res-panel">
+              <div class="res-when">Use when a coding analysis report or dashboard request has been fulfilled and is ready for delivery. This template is not product-area-specific.</div>
+              <pre class="tpl-pre">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+Your report / dashboard update for <span class="ph">[BRIEF_DESCRIPTION]</span> is ready.
+
+<strong>Delivered:</strong>
+<span class="ph">[Attach the file or paste the dashboard link here.]</span>
+
+<strong>Report details:</strong>
+&bull; Period: <span class="ph">[DATE_RANGE]</span>
+&bull; Specialty / Provider: <span class="ph">[DETAILS]</span>
+&bull; Format: <span class="ph">[Excel / PDF / Dashboard]</span>
+
+<span class="tpl-opt">[If the report revealed an action item:
+&ldquo;During preparation we noticed [FINDING]. We recommend [ACTION / have raised [TICKET_ID] to track this].&rdquo;]</span>
+
+Please review and let us know if you need additional cuts, filters, or a follow-up analysis.
+
+This ticket will now be closed.
+
+Thank you,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+              <div class="tpl-ph-guide">
+                <div class="ph-label">Placeholders</div>
+                <ul>
+                  <li><code>[BRIEF_DESCRIPTION]</code> &rarr; e.g. &ldquo;monthly coding accuracy report for April 2026&rdquo;</li>
+                  <li><code>[DATE_RANGE]</code>, <code>[DETAILS]</code>, <code>[FORMAT]</code> &rarr; fill from ticket details</li>
+                  <li><code>[CDT_REP_NAME]</code> / <code>[CUSTOMER_NAME]</code> &rarr; replace before posting</li>
+                </ul>
+              </div>
+              <button class="copy-btn" onclick="copyTpl(this)">Copy template</button>
+            </div>
+
+            <!-- CLARITY NEEDED -->
+            <div id="res-cn" class="res-panel">
+              <div class="res-when">Clarity Needed is a temporary category. This closure comment is sent once the customer has provided the requested information and the ticket is being transitioned to its true category (Bug, SOP Update, Non-Issue, etc.).</div>
+              <pre class="tpl-pre">Hi <span class="ph">[CUSTOMER_NAME]</span>,
+
+Thank you for providing the requested information. We have reviewed the details you shared.
+
+<strong>Finding:</strong>
+<span class="ph">[Choose one:
+&bull; &ldquo;Based on the CSNs you provided, we have confirmed this is a [Bug / SOP Update / Enhancement]. We have [begun work on a fix / raised [TICKET_ID] to track it].&rdquo;
+&bull; &ldquo;Based on your confirmation, we have [DESCRIBE_ACTION_TAKEN]. The pipeline has been updated accordingly.&rdquo;
+&bull; &ldquo;After reviewing the examples, we can confirm the pipeline is working as designed. [BRIEF_EXPLANATION].&rdquo;]</span>
+
+<span class="tpl-opt">[If follow-on work was opened: &ldquo;The resolution will be tracked under [TICKET_ID].&rdquo;]</span>
+
+This ticket will now be closed.
+
+Thank you,
+<span class="ph">[CDT_REP_NAME]</span> | Customer Delight Team</pre>
+              <div class="tpl-ph-guide">
+                <div class="ph-label">Placeholders</div>
+                <ul>
+                  <li><code>[CUSTOMER_NAME]</code> &rarr; customer&#39;s name</li>
+                  <li><code>[CDT_REP_NAME]</code> &rarr; your name</li>
+                  <li><code>[TICKET_ID]</code> &rarr; new Bug / SOP Update ticket ID if one was opened</li>
+                  <li><code>[DESCRIBE_ACTION_TAKEN]</code> / <code>[BRIEF_EXPLANATION]</code> &rarr; fill from investigation notes</li>
+                </ul>
+              </div>
+              <button class="copy-btn" onclick="copyTpl(this)">Copy template</button>
+            </div>
+
+          </div>
+        </details>
+
+        <div class="next-stage-bar">
+          <span class="ns-label">Next &rarr;</span>
+          <div class="ns-route"><span class="ns-cond">Ticket closed, customer satisfied</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">&#10003; Done</span></div>
+          <div class="ns-route"><span class="ns-cond">Customer reopens the ticket</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 12 (Reopened)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ STAGE 12 ══════════ -->
+    <div class="stage-card cdt" id="stage-12">
+      <div class="stage-header">
+        <div class="stage-meta">
+          <span class="stage-eyebrow">Stage 12</span>
+          <h2 class="stage-name">Ticket Reopened</h2>
+          <div class="stage-trigger-inline">Customer replies to a closed ticket disputing the fix</div>
+        </div>
+        <div class="owner-chip cdt">CDT (first responder)</div>
+        <div class="stage-ghost">12</div>
+      </div>
+      <div class="stage-body">
+
+        <div>
+          <div class="section-label">CDT Actions</div>
+          <ul class="actions-list">
+            <li><div class="action-num">1</div><span>Review the customer's concern against the original fix and acceptance criteria</span></li>
+            <li><div class="action-num">2</div><span>Determine the reopen type:
+              <br/><strong>A. Same issue regressed</strong>, the original fix broke or didn't fully resolve the problem
+              <br/><strong>B. New related issue</strong>, a different but related problem the customer is now raising
+            </span></li>
+            <li><div class="action-num">3</div><span><strong>If A:</strong> Reopen the original ticket. Status → <span class="status-pill sp-reopen">Reopened</span>. Notify Product PM + Pod Lead immediately. RCA is mandatory, what in the fix failed?</span></li>
+            <li><div class="action-num">4</div><span><strong>If B:</strong> Create a new ticket. Link it to the original with link type <code>causes</code>. Do NOT reuse the same ticket for a different problem.</span></li>
+            <li><div class="action-num">5</div><span>Set priority based on customer sentiment. Acknowledge the reopen to the customer via "Reply to Customer" within 24 hours.</span></li>
+          </ul>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <div class="section-label">Jira Updates</div>
+            <ul class="jira-list">
+              <li><span class="field-name">Status (if same issue):</span>&nbsp;<span class="status-pill sp-done">Done</span> <span class="arrow">to</span> <span class="status-pill sp-reopen">Reopened</span></li>
+              <li><span class="field-name">If new issue:</span>&nbsp;Create new ticket; link to original</li>
+              <li><span class="field-name">Assignee:</span>&nbsp;CDT + Product PM + Pod Lead</li>
+              <li><span class="field-name">Internal Note:</span>&nbsp;Reopen reason + same vs. new issue assessment</li>
+              <li><span class="field-name">Reply to Customer:</span>&nbsp;Acknowledgment within 24hrs</li>
+            </ul>
+          </div>
+          <div>
+            <div class="section-label">Done When</div>
+            <div class="done-box">
+              <ul>
+                <li>Reopen classified (same issue vs. new)</li>
+                <li>Routed to correct stage (Stage 3 if scoping needed, Stage 5 if scope is clear)</li>
+                <li>Customer acknowledged within 24 hours</li>
+                <li>RCA initiated if same issue</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label">Rules</div>
+          <ul class="rules-list">
+            <li>NEVER dismiss a reopen without investigation. Re-open rate is ~20%, this is a known systemic problem, not individual edge cases.</li>
+            <li class="gap">If same issue: RCA is mandatory. Identify what in the fix was incomplete and who owns the gap. <span class="gap-tag">Not followed today</span></li>
+            <li>Do NOT reuse the same ticket for a different problem, it pollutes the history and makes pattern analysis impossible</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════ ESCALATION FAST-TRACK ══════════ -->
+    <div class="stage-card esc" id="esc">
+      <div class="stage-header">
+        <div class="stage-meta">
+          <span class="stage-eyebrow">Fast-Track</span>
+          <h2 class="stage-name">Escalation &amp; Rollout Blocker<span class="esc-badge">⚡ PARALLEL TO MAIN FLOW</span></h2>
+          <div class="stage-trigger-inline">Label = ESCALATION or ESCALATED or ROLLOUT_BLOCKER · Runs in parallel with the main stages above</div>
+        </div>
+        <div class="owner-chip esc">CDT + Pod Lead</div>
+        <div class="stage-ghost">!</div>
+      </div>
+      <div class="stage-body">
+
+        <div>
+          <div class="section-label">Label Definitions</div>
+          <div class="taxonomy-grid">
+            <div class="tax-item" style="border-left: 3px solid var(--esc)"><span class="tax-name">ESCALATION</span><span class="tax-desc">Customer directly involved with founders. Needs resolution today/yesterday. Founders are watching.</span></div>
+            <div class="tax-item" style="border-left: 3px solid var(--esc)"><span class="tax-name">ESCALATED</span><span class="tax-desc">Formally escalated through CS leadership channel.</span></div>
+            <div class="tax-item" style="border-left: 3px solid var(--esc)"><span class="tax-name">ROLLOUT_BLOCKER</span><span class="tax-desc">Blocking a go-live. Must close before the committed go-live date.</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label">Escalation Actions (CDT + Pod Lead)</div>
+          <ul class="actions-list">
+            <li><div class="action-num">1</div><span><strong>ESCALATION / ESCALATED label is applied by the Customer Success team</strong> after discussion with the customer, before or at the point of ticket creation. CDT does not apply this label. When CDT sees this label on a ticket, that is the trigger to initiate the fast-track process below.</span></li>
+            <li><div class="action-num">2</div><span>Notify <strong>Ashish Kashyap</strong> (escalations lead) and the relevant Pod Lead directly (do not rely on Jira notifications alone)</span></li>
+            <li><div class="action-num">3</div><span>Ticket must be <strong>scoped within 24 hours</strong> of escalation label being applied (P0 SLA)</span></li>
+            <li><div class="action-num">4</div><span>Pod Lead commits to a fix ETA, communicate to customer via "Reply to Customer" within 24 hours of escalation label</span></li>
+            <li><div class="action-num">5</div><span>Post a daily status update in the Internal Note until the ticket is closed</span></li>
+            <li><div class="action-num">6</div><span>All normal stages still apply, <strong>no patches</strong>, no shortcuts on scope, no skipping CQA or CDT validation</span></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="section-label">Escalation SLA</div>
+          <div class="sla-row">
+            <div class="sla-chip"><b>Scoping</b>Within 24 hrs of label</div>
+            <div class="sla-chip"><b>Fix</b>Within 3 days</div>
+            <div class="sla-chip"><b>Customer update</b>Every 24 hrs until resolved</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label">Rollout Blocker Actions</div>
+          <ul class="actions-list">
+            <li><div class="action-num">1</div><span>Identify the go-live date immediately. Work backwards from it, if the fix ETA exceeds the go-live, escalate to Utkarsh Jindal same day.</span></li>
+            <li><div class="action-num">2</div><span>Notify the Go-Lives Charter owner (currently being handed to Jothirnadh from Keshav)</span></li>
+            <li><div class="action-num">3</div><span>All normal stages apply, escalation does not bypass CQA or CDT validation</span></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="section-label">Rules</div>
+          <ul class="rules-list">
+            <li>Escalation does NOT mean shortcuts. No patches, no skipped stages. It means priority and speed within the correct process.</li>
+            <li>An escalation ticket that has no owner within 2 hours of labeling is a process failure, notify CDT lead immediately</li>
+            <li>ESCALATION / ESCALATED labels are owned entirely by the Customer Success team. No other team applies or removes them.</li>
+            <li>ESCALATION label belongs ONLY on customer-facing JSM tickets, never on CPS or internal engineering board tickets. Applying it to engineering tickets inflates escalation counts and corrupts reporting.</li>
+            <li>Removal of the ESCALATION / ESCALATED label must be initiated and approved by the Customer Success team only, after confirming with the customer that the issue is resolved to their satisfaction.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /main-content -->
+</div><!-- /layout -->
+
+
+<script>
+function copyTpl(btn) {
+  var body = btn.closest('.template-body');
+  var pre = body.querySelector('.tpl-pre') || body.querySelector('.tpl-pre-sm');
+  if (!pre) return;
+  var text = pre.innerText || pre.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    var orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(function() { btn.textContent = orig; btn.classList.remove('copied'); }, 1800);
+  }).catch(function() {
+    // fallback: select text
+    var r = document.createRange(); r.selectNode(pre);
+    window.getSelection().removeAllRanges(); window.getSelection().addRange(r);
+  });
+}
+function switchResTab(el) {
+  var body = el.closest('.template-body');
+  body.querySelectorAll('.res-tab').forEach(function(t) { t.classList.remove('active'); });
+  body.querySelectorAll('.res-panel').forEach(function(p) { p.classList.remove('active'); });
+  el.classList.add('active');
+  body.querySelector('#' + el.dataset.panel).classList.add('active');
+}
+</script>
+
+</body>
+</html>
