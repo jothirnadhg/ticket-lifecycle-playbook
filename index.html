@@ -1344,7 +1344,8 @@
           <div class="section-label">Hand Off To</div>
           <div class="handoff-grid">
             <div class="handoff-item"><span>Clarity Needed</span><span class="handoff-arrow">→</span><span class="handoff-dest">Stage 2 (CS team)</span></div>
-            <div class="handoff-item"><span>Bug / SOP Update / Enhancement / Regression / Data pull issue / Submission issue</span><span class="handoff-arrow">→</span><span class="handoff-dest">Stage 3 (Product PM)</span></div>
+            <div class="handoff-item"><span>Bug</span><span class="handoff-arrow">→</span><span class="handoff-dest">Stage 5 (CDT creates CPS directly — no Product Scoping)</span></div>
+            <div class="handoff-item"><span>Enhancement / SOP Update / Regression / Data pull issue / Submission issue</span><span class="handoff-arrow">→</span><span class="handoff-dest">Stage 3 (Product PM)</span></div>
             <div class="handoff-item"><span>Product tasks (self serve) / Self Serve Bug / CS tasks (self serve) / PII tasks / DevOps</span><span class="handoff-arrow">→</span><span class="handoff-dest">Stage 4 (Product / CS / DevOps)</span></div>
             <div class="handoff-item"><span>IAT error (pure)</span><span class="handoff-arrow">→</span><span class="handoff-dest">Res Coding SPOCs (Athena: Kanak / Epic: Gayathri)</span></div>
             <div class="handoff-item"><span>ESCALATION / ESCALATED label present (applied by CS)</span><span class="handoff-arrow">→</span><span class="handoff-dest">Trigger Escalation Fast-Track ⚡ simultaneously</span></div>
@@ -1430,7 +1431,8 @@ Thank you,
         <div class="next-stage-bar">
           <span class="ns-label">Next &rarr;</span>
           <div class="ns-route"><span class="ns-cond">Clarity Needed</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 2 (Waiting for Customer Clarity)</span></div>
-          <div class="ns-route"><span class="ns-cond">Bug / Enhancement / SOP Update</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 3 (Product Scoping)</span></div>
+          <div class="ns-route"><span class="ns-cond">Bug</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 5 (CDT creates CPS directly — bypasses Product Scoping)</span></div>
+          <div class="ns-route"><span class="ns-cond">Enhancement / SOP Update / Regression / Data pull issue / Submission issue</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 3 (Product Scoping)</span></div>
           <div class="ns-route"><span class="ns-cond">Self-Serve / IAT / Non-Issue / Reporting</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 4 (Non-Eng Closure)</span></div>
           <div class="ns-route"><span class="ns-cond">ESCALATION or ESCALATED label applied</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">&#9889; Escalation Fast-Track (parallel to all stages)</span></div>
         </div>
@@ -1483,11 +1485,10 @@ Thank you,
         </div>
 
         <div>
-          <div class="section-label">Stale Ticket Rule (owner: Jasmeet Singh)</div>
+          <div class="section-label">Stale Ticket Rule (owner: Krishna / CS Team)</div>
           <ul class="actions-list">
-            <li class="gap"><div class="action-num">1</div><span>48 hrs no response → CS team sends Follow-Up Attempt 1 (use standard template) <span class="gap-tag">Not followed today</span></span></li>
-            <li><div class="action-num">2</div><span>48 hrs more no response → Follow-Up Attempt 2</span></li>
-            <li class="gap"><div class="action-num">3</div><span>48 hrs more no response → Close the ticket. Post "Reply to Customer" explaining closure. Log in Internal Note. <span class="gap-tag">Not followed today</span></span></li>
+            <li><div class="action-num">1</div><span>Before every weekly customer call, CS reviews all tickets in <strong>Waiting for Customer</strong> status for that customer. Use the follow-up templates below to send a follow-up where needed. Log every attempt in an Internal Note.</span></li>
+            <li><div class="action-num">2</div><span><strong>No auto-close.</strong> Tickets are not closed based on a fixed number of attempts. Closure is a conscious CS decision — either the customer confirms no further action is needed, or CS determines the ticket is no longer actionable. Close only after that explicit call.</span></li>
           </ul>
         </div>
 
@@ -1636,7 +1637,6 @@ Thank you,
           <span class="ns-label">Next &rarr;</span>
           <div class="ns-route"><span class="ns-cond">Customer responds &mdash; re-triage needed</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 1 (Triaging)</span></div>
           <div class="ns-route"><span class="ns-cond">Customer responds &mdash; scope is clear</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Stage 3 (Product Scoping)</span></div>
-          <div class="ns-route"><span class="ns-cond">No response after 3 attempts</span><span class="ns-arrow"> &rarr; </span><span class="ns-dest">Close ticket (Stage 11 comms template)</span></div>
         </div>
       </div>
     </div>
@@ -1647,7 +1647,7 @@ Thank you,
         <div class="stage-meta">
           <span class="stage-eyebrow">Stage 3</span>
           <h2 class="stage-name">Product Scoping</h2>
-          <div class="stage-trigger-inline">Status = Discovery · Issue Category = Bug / Enhancement / SOP Update · Triaged = Yes</div>
+          <div class="stage-trigger-inline">Status = Discovery · Issue Category = Enhancement / SOP Update / Regression / Data pull issue / Submission issue · Triaged = Yes</div>
         </div>
         <div class="owner-chip prod">Product PM</div>
         <div class="stage-ghost">3</div>
@@ -1904,7 +1904,7 @@ Thank you,
             </div>
             <div class="subtix-side-item">
               <span class="subtix-pill st-reject">Rejected</span>
-              <div class="subtix-side-desc"><strong>Use when:</strong> ticket is found to be invalid, duplicate, or out of scope during triage or development. Log the reason. Customer ticket must also be updated by CDT &mdash; do not silently reject.</div>
+              <div class="subtix-side-desc"><strong>Use when:</strong> ticket is found to be invalid, duplicate, or out of scope during triage or development. <strong>Requires joint sign-off from both Product and Engineering</strong> — neither can reject unilaterally. Log the rejection reason and document both approvers in an Internal Note. Customer ticket must also be updated by CDT — do not silently reject.</div>
             </div>
           </div>
           <div class="subtix-note">Every status change on the sub-ticket is visible to CDT. Do not let a sub-ticket sit in one status for &gt; 2 business days without an Internal Note explaining why. Stale sub-tickets = stale customer ticket in CDT's view.</div>
@@ -1932,7 +1932,7 @@ Thank you,
             <li><div class="action-num">2</div><span>Assign the CPS ticket to the right <strong>Developer</strong></span></li>
             <li class="gap"><div class="action-num">3</div><span>Create <strong>engineering sub-tasks</strong> for each sub-team involved: Backend / Prompt / DL / Integrations / QA. Link all sub-tasks to the CPS ticket. <span class="gap-tag">Not followed today</span></span></li>
             <li><div class="action-num">4</div><span>Agree on a realistic <strong>ETA</strong> that includes: dev time + CQA testing + regression + CDT validation + any dependencies on other teams</span></li>
-            <li class="gap"><div class="action-num">5</div><span>Set the <strong>Due Date</strong> field on the engineering ticket as the committed ETA. Update <strong>Story Points</strong> to reflect task complexity so effort is visible alongside the timeline. Communicate the ETA to the customer via <strong>"Reply to Customer"</strong> on the customer ticket. <span class="gap-tag">Not followed today</span></span></li>
+            <li class="gap"><div class="action-num">5</div><span>Each engineering sub-team sets a <strong>Due Date</strong> on their own child ticket (CIPHER / CUR sub-task). Pod Lead reviews all child ticket due dates, takes the <strong>latest due date + 1–2 day buffer</strong>, and sets that as the <strong>Due Date on the CPS ticket</strong>. Pod Lead then communicates this committed ETA to the customer via <strong>"Reply to Customer"</strong> on the customer ticket. Update <strong>Story Points</strong> on child tickets to reflect task complexity. <span class="gap-tag">Not followed today</span></span></li>
             <li class="gap"><div class="action-num">6</div><span>Move customer ticket status to <span class="status-pill sp-deliver">Picked for Delivery</span><span class="pending-tag">Not in Jira yet</span> <span class="gap-tag">Not followed today</span></span></li>
             <li class="gap"><div class="action-num">7</div><span><strong>Developer:</strong> open the CIPHER / CUR sub-ticket immediately. Set <strong>Story Points</strong> (complexity estimate) and <strong>Due Date</strong> (= committed ETA agreed with Pod Lead). Move the sub-ticket from <span class="subtix-pill st-todo" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #94a3b8;">To Do</span> to <span class="subtix-pill st-inprog" style="display:inline;padding:2px 5px;font-size:9px;border-radius:3px;border:1px solid #93c5fd;">In Progress</span> the moment you start work. <span class="gap-tag">Not followed today</span></span></li>
             <li class="gap"><div class="action-num">8</div><span><strong>Developer:</strong> all sub-ticket status changes must happen on the day the status actually changes &mdash; not retroactively at the end. Stale sub-ticket status = invisible progress for CDT and Pod Lead. <span class="gap-tag">Not followed today</span></span></li>
